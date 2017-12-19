@@ -139,10 +139,10 @@ void TrackCam::setVertex(){
 void TrackCam::drawEdge(){
 	Mat edgeIm = sceneIm;
 
-	line(edgeIm, Point(x[0], y[0]), Point(x[1], y[1]), Scalar(0, 255, 0), 5);
-	line(edgeIm, Point(x[1], y[1]), Point(x[2], y[2]), Scalar(0, 255, 0), 5);
-	line(edgeIm, Point(x[2], y[2]), Point(x[3], y[3]), Scalar(0, 255, 0), 5);
-	line(edgeIm, Point(x[3], y[3]), Point(x[0], y[0]), Scalar(0, 255, 0), 5);
+	line(edgeIm, Point(x[0], y[0]), Point(x[1], y[1]), Scalar(0, 255, 0), 2);
+	line(edgeIm, Point(x[1], y[1]), Point(x[2], y[2]), Scalar(0, 255, 0), 2);
+	line(edgeIm, Point(x[2], y[2]), Point(x[3], y[3]), Scalar(0, 255, 0), 2);
+	line(edgeIm, Point(x[3], y[3]), Point(x[0], y[0]), Scalar(0, 255, 0), 2);
 	
 	imwrite("./edgeIm.jpg", edgeIm);
 
@@ -152,10 +152,15 @@ void TrackCam::drawEdge(){
 void TrackCam::setBound(){
 	int x_start = min(x[0], x[3]);
 	int y_start = min(y[0], y[1]);
-	int x_len = max(x[1] - x[0], x[2] - x[3]);
-	int y_len = max(y[3] - y[0], y[2] - y[1]);
+	width = max(x[1] - x[0], x[2] - x[3]);
+	height = max(y[3] - y[0], y[2] - y[1]);
 	
 	bound = Rect(x_start, y_start, x_len, y_len);
+
+	cout<<"Bound: "<<endl;
+	cout<<"   - Origin: "<<"("<<x_start<<", "<<y_start<<")"<<endl;
+	cout<<"   - Width : "<<width<<endl;
+	cout<<"   - Height: "<<height<<endl;
 
 	return;
 }
