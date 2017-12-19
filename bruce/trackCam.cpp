@@ -155,7 +155,7 @@ void TrackCam::setBound(){
 	width = max(x[1] - x[0], x[2] - x[3]);
 	height = max(y[3] - y[0], y[2] - y[1]);
 	
-	bound = Rect(x_start, y_start, x_len, y_len);
+	bound = Rect(x_start, y_start, width, height);
 
 	cout<<"Bound: "<<endl;
 	cout<<"   - Origin: "<<"("<<x_start<<", "<<y_start<<")"<<endl;
