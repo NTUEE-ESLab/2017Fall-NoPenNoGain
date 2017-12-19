@@ -28,7 +28,7 @@ bool TrackCam::init(){
 	setVertex();
 	drawEdge();
 	setBound();
-	setParam();
+	//setParam();
 	return true;
 }
 
