@@ -19,7 +19,8 @@ class TrackCam{
 		Mat sceneIm;
 		int x[4], y[4];	//Observed positions of the target screen's vertices
 		int width, height;	//Target screen size
-		int bx0, bx1, bx2, by0, by1, by2; //For solving the coordination trasfering problem
+		//int bx0, bx1, bx2, by0, by1, by2; //For solving the coordination trasfering problem
+		float x_I1, y_I1, x_I2, y_I2; //Ideal point
 		Rect bound;
 		Scalar lBound, uBound; //HSV range for recognizing the red region
 
@@ -28,7 +29,7 @@ class TrackCam{
 		void setVertex();
 		void drawEdge();
 		void setBound();
-		void setParam();
+		void setIdealPoint();
 		void calibration(int, int, float&, float&);
 };
 

@@ -28,7 +28,7 @@ bool TrackCam::init(){
 	setVertex();
 	drawEdge();
 	setBound();
-	//setParam();
+	setIdealPoint();
 	return true;
 }
 
@@ -165,6 +165,34 @@ void TrackCam::setBound(){
 	return;
 }
 
+void TrackCam::setIdealPoint(){
+	//AB : y = ax + b
+	//CD : y = cx + d
+	//BC : y = ex + f
+	//DA : y = gx + h
+	float a =  (float( y[1] - y[0] )) / (x[1] - x[0]);
+	float b = -(float( y[1] - y[0] )) / (x[1] - x[0]) * x[0] + y[0];
+	float c =  (float( y[2] - y[3] )) / (x[2] - x[3]);
+	float d = -(float( y[2] - y[3] )) / (x[2] - x[3]) * x[3] + y[3];
+	float e =  (float( y[3] - y[0] )) / (x[3] - x[0]);
+	float f = -(float( y[3] - y[0] )) / (x[3] - x[0]) * x[3] + y[3];
+	float g =  (float( y[2] - y[1] )) / (x[2] - x[1]);
+	float h = -(float( y[2] - y[1] )) / (x[2] - x[1]) * x[2] + y[2];
+
+	x_I1 = -(b - d) / (a - c);
+	y_I1 = -(b - d) / (a - c) * a + b;
+	x_I2 = -(f - h) / (e - g);
+	y_I2 = -(f - h) / (e - g) * e + f;
+
+	cout<<"Ideal point 1 at: ("<<x_I1<<", "<<y_I1<<")"<<endl;
+	cout<<"Ideal point 2 at: ("<<x_I2<<", "<<y_I2<<")"<<endl;
+
+	return;
+}
+
+void TrackCam::callibration(int x_t, int y_t, float &lamx, float &lamy){	
+}
+/*
 void TrackCam::setParam(){
 	bx0 = x[0] - x[1] + x[2] - x[3];
 	bx1 = x[0] - x[1];
@@ -190,5 +218,5 @@ void TrackCam::calibration(int x_t, int y_t, float &lamx, float &lamy){
 
 	return;
 }
-
+*/
 		
