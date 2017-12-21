@@ -50,7 +50,7 @@ void TrackCam::track(){
 		camera->retrieve(im);
 
 		//Crop it
-		bound = Rect(0, 0, 1200, 960);
+		//bound = Rect(0, 0, 1200, 960);
 		im = im(bound);
 
 		//Get the red part
@@ -76,7 +76,7 @@ void TrackCam::track(){
 		
 		// Print the center of the signal in (origin | tranformed) coordinate
 		if(x_ave == -1) cout<<"\r(---, ---) | (---, ---)"<<flush;
-		else cout<<"\r("<<x_ave<<", "<<y_ave<<") | ("<<x_trans<<", "<<y_trans<<")"<<flush;
+		else cout<<"\r("<<x_ave<<", "<<y_ave<<") | ("<<x_trans<<", "<<y_trans<<")            "<<flush;
 
 		//Draw the trace
 		//if(x_ave != -1 && x_pre != -1){
