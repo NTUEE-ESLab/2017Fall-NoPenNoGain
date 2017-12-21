@@ -94,7 +94,7 @@ void pen_thread(){
 
 void opencv_thread(){
 	while(1){
-		//
+		//do the computation here
 		trackCam->track();
 	
 		unique_lock<mutex> lk(mu);
