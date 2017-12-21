@@ -250,6 +250,9 @@ void TrackCam::setIdealPoint(){
 }
 
 void TrackCam::transformation(int x_T, int y_T, float &x_trans, float &y_trans){
+	//
+	float x_F, x_E;
+
 	//Find the x coordinate of point E while BC and DA being, 1. parrallel, 2. not parrallel
 	if(para1 == true){
 		//The case that DA is parallel with BC
@@ -259,7 +262,7 @@ void TrackCam::transformation(int x_T, int y_T, float &x_trans, float &y_trans){
 
 		//this line intersects AB at point E
 		//AB: y = ax + b
-		float x_E = -(b - r) / (a - c);
+		x_E = -(b - r) / (a - c);
 	}
 	else{
 		//The case that DA is not parallel with BC
@@ -269,7 +272,7 @@ void TrackCam::transformation(int x_T, int y_T, float &x_trans, float &y_trans){
 		float h = -(float( y_I2 - y_T )) / ( x_I2 - x_T ) * x_T + y_T;
 
 		//Point E is the intersection of AB and I2Vt
-		float x_E = -(a - g) / (b - h);
+		x_E = -(a - g) / (b - h);
 	}
 
 	//Find the x coordinate of point F while BC and DA being, 1. parrallel, 2. not parrallel
@@ -281,7 +284,7 @@ void TrackCam::transformation(int x_T, int y_T, float &x_trans, float &y_trans){
 
 		//this line intersects DA at point E
 		//DA: y = cx + d
-		float x_F = -(d - r) / (c - a);
+		x_F = -(d - r) / (c - a);
 	}
 	else{
 		//DA: y = cx + d
@@ -290,7 +293,7 @@ void TrackCam::transformation(int x_T, int y_T, float &x_trans, float &y_trans){
 		float f = -(float( y_I1 - y_T )) / ( x_I1 - x_T ) * x_T + y_T;
 	
 		//Point F is the intersection of DA and I1Vt
-		float x_F = -(c - e) / (d - f);
+		x_F = -(c - e) / (d - f);
 	}
 
 	//Reciprocal of the cross ratio on line AI1

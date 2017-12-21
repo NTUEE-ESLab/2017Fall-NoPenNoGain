@@ -32,7 +32,7 @@ class TrackCam{
 		void drawEdge();
 		void setBound();
 		void setIdealPoint();
-		void transformation(int, int, float&, float&);
+		void transformation(int, int, int&, int&);
 };
 
 #endif //TRACKCAM_H
