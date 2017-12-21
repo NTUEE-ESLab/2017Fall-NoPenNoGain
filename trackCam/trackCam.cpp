@@ -11,24 +11,39 @@ using namespace std;
 using namespace cv;
 
 TrackCam::~TrackCam(){
+	//Release the camera
 	if(camera->open())
 		camera->release();
 }
 
 bool TrackCam::init(){
+	//Return false if no camera connected successfully
 	camera = new raspicam::RaspiCam_Cv;
 	if(!camera->open()){
 		cout << "Camera failed!" << endl;
 		return false;
 	}
+
+	//Bound of HSV value for recognizing the red pixels
 	lBound = Scalar(80, 80, 60);
 	uBound = Scalar(100, 255, 255);
+
+	//Return false if the surrounding would confused the process(i.e. some red objects)
 	if(!setScene())
 		return false;
+
+	//Set the vertices of the screen
 	setVertex();
+
+	//Marked the edge and save the image
 	drawEdge();
+
+	//Set the bound for cropping the image to a smaller one
 	setBound();
+
+	//Set the ideal points for transforming the coordinates 
 	setIdealPoint();
+
 	return true;
 }
 
@@ -48,13 +63,7 @@ void TrackCam::track(){
 		camera->retrieve(im);
 
 		//Crop it
-		//bound = Rect(0, 0, 1200, 960);
 		im = im(bound);
-		cout << "Set bound as:" << endl;
-		cout << "   - x_start: " << bound.x << endl;
-		cout << "   - y_start: " << bound.y << endl;
-		cout << "   - width  : " << bound.width <<endl;
-		cout << "   - height : " << bound.height <<endl;
 
 		//Get the red part
 		cvtColor(~im, im_hsv_inv, COLOR_BGR2HSV);
@@ -69,6 +78,7 @@ void TrackCam::track(){
 				x_ave += locations[i].x;
 				y_ave += locations[i].y;
 			}
+			//Save the current position of the red spot
 			x_ave /= pix_num;
 			y_ave /= pix_num;
 
@@ -78,14 +88,10 @@ void TrackCam::track(){
 		else x_ave = y_ave = -1;
 		
 		// Print the center of the signal in (origin | tranformed) coordinate
-		if(x_ave == -1) cout << "\r(---, ---) | (---, ---)" << flush;
+		if(x_ave == -1) cout << "\r(---, ---) | (---, ---)     " << flush;
 		else cout << "\r(" << x_ave << ", " << y_ave << ") | (" << x_trans << ", " << y_trans << ")            " << flush;
 
-		//Draw the trace
-		//if(x_ave != -1 && x_pre != -1){
-		//	line(im_track, Point(x_pre, y_pre), Point(x_ave, y_ave), Scalar(0, 255, 0), 5);
-
-		//Set x_pre , y_pre
+		//Save current status as x_pre , y_pre for the next loop
 		x_pre = x_ave;
 		y_pre = y_ave;
 	}
@@ -188,18 +194,16 @@ void TrackCam::setBound(){
 	
 	//Set the private variable, bound
 	bound = Rect(x_start, y_start, width, height);
+	cout << "Set bound as:" << endl;
+	cout << "   - Origin: " << "(" << x_start << ", " << y_start << ")" << endl;
+	cout << "   - width  : " << bound.width <<endl;
+	cout << "   - height : " << bound.height <<endl;
 
 	//Adjust the vertices' coordination due to the change of bound
 	for(int i=0; i<4; ++i){
 		x[i] -= x_start;
 		y[i] -= y_start;
 	}
-
-	//Print the result
-	cout << "Bound: " << endl;
-	cout << "   - Origin: " << "(" << x_start << ", " << y_start << ")" << endl;
-	cout << "   - Width : " << width << endl;
-	cout << "   - Height: " << height << endl;
 
 	return;
 }
@@ -312,15 +316,6 @@ void TrackCam::transformation(int x_T, int y_T, int &x_trans, int &y_trans){
 		//Point F is the intersection of DA and I1Vt
 		x_F = - (d - f) / (c - e);
 	}
-
-	/*
-	cout<<"x_E at: "<<x_E<<endl;
-	cout<<"x_F at: "<<x_F<<endl;
-
-	char ccc;
-	cout<<"Press to continue"<<endl;
-	cin>>ccc;
-	*/
 	
 	//Reciprocal of the cross ratio on line AI1
 	float k = ((x_I1 - x[0]) * (x[1] - x_E)) / ((x[1] - x[0]) * (x_I1 - x_E));
@@ -333,31 +328,10 @@ void TrackCam::transformation(int x_T, int y_T, int &x_trans, int &y_trans){
 	return;
 }
 
-/*
-void TrackCam::setParam(){
-	bx0 = x[0] - x[1] + x[2] - x[3];
-	bx1 = x[0] - x[1];
-	bx2 = x[0] - x[3];
-	by0 = y[0] - y[1] + y[2] - y[3];
-	by1 = y[0] - y[1];
-	by2 = y[0] - y[3];
 
-	return;
-}
 
-void TrackCam::calibration(int x_t, int y_t, float &lamx, float &lamy){
-	float a = float(bx1 * by0 - bx0 * by1);
-	float b = float(- by0 * (x[0] - x_t) + bx0 * (y[0] - y_t) + bx2 * by1 - bx1 * by2);
-	float c = float(by2 * (x[0] - x_t) - bx2 * (y[0] - y_t));
 
-	float sq = sqrt(b * b - 4 * a * c);
 
-	lamx = (- b + sq) / (2 * a);
-	if(lamx > 1 || lamx < 0)
-		lamx = (- b - sq) / (2 * a);
-	lamy = (bx1 * lamx - (x[0] - x_t)) / (bx0 * lamx - bx2);
 
-	return;
-}
-*/
-		
+
+

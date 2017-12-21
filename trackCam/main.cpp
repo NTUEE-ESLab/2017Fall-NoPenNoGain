@@ -4,14 +4,13 @@
 #include "trackCam.cpp"
 
 using namespace std;
-using namespace cv;
 
 TrackCam* trackCam = new TrackCam();
 
 int main(int argc, char **argv){
 	if(!trackCam->init())
 		return -1;
-	cout<<"fine."<<endl;
+	cout<<"Camera initialization successed."<<endl;
 	trackCam->track();
 
 	return 0;
