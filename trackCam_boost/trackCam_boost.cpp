@@ -5,7 +5,7 @@
 #include <thread>
 #include <opencv2/opencv.hpp>
 #include <raspicam/raspicam_cv.h>
-#include "trackCam.h"
+#include "trackCam_boost.h"
 
 using namespace std;
 using namespace cv;
