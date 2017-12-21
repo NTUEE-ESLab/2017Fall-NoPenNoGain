@@ -204,8 +204,15 @@ void TrackCam::setBound(){
 void TrackCam::setIdealPoint(){
 	//Check if the edges are parallel
 	para1 = para2 = false;
-	if((x[3] - x[0]) * (y[2] - y[1]) == (x[2] - x[1]) * (y[3] - y[0])) para1 = true;
-	if((x[1] - x[0]) * (y[2] - y[3]) == (x[2] - x[3]) * (y[1] - y[0])) para2 = true;
+	//The case if DA is parallel with BC
+	if((x[3] - x[0]) * (y[2] - y[1]) == (x[2] - x[1]) * (y[3] - y[0]))
+		para1 = true;
+	//The case if AB is parallel with DC
+	if((x[1] - x[0]) * (y[2] - y[3]) == (x[2] - x[3]) * (y[1] - y[0]))
+		para2 = true;
+
+	//Coefficients of the lines' equations
+	float e, f, g, h;
 
 	//Set ideal point 1 if AB and CD are not parallel
 	if(para1 == false){
@@ -223,16 +230,16 @@ void TrackCam::setIdealPoint(){
 
 	//Set ideal point 2 if BC and DA are not parallel
 	if(para2 == false){
-		//BC: y = cx + d
-		//DA: y = gx + h
-		c =  (float( y[2] - y[1] )) / (x[2] - x[1]);
-		d = -(float( y[2] - y[1] )) / (x[2] - x[1]) * x[2] + y[2];
-		g =  (float( y[3] - y[0] )) / (x[3] - x[0]);
-		h = -(float( y[3] - y[0] )) / (x[3] - x[0]) * x[3] + y[3];
+		//DA: y = cx + d
+		//BC: y = gx + h
+		c =  (float( y[3] - y[0] )) / (x[3] - x[0]);
+		d = -(float( y[3] - y[0] )) / (x[3] - x[0]) * x[3] + y[3];
+		g =  (float( y[2] - y[1] )) / (x[2] - x[1]);
+		h = -(float( y[2] - y[1] )) / (x[2] - x[1]) * x[2] + y[2];
 
 		//I2 is the intersection of BC and DA
-		x_I2 = -(h - d) / (g - c);
-		y_I2 =  x_I2 * g + h;
+		x_I2 = -(d - h) / (c - g);
+		y_I2 =  x_I2 * c + d;
 	}
 
 	//Print the result
@@ -242,32 +249,57 @@ void TrackCam::setIdealPoint(){
 	return;
 }
 
-void TrackCam::transformation(int x_t, int y_t, float &x_trans, float &y_trans){
-	//Find the x coordinate of point E while BC and DA are not parallel
-	if(para1 == false){
+void TrackCam::transformation(int x_T, int y_T, float &x_trans, float &y_trans){
+	//Find the x coordinate of point E while BC and DA being, 1. parrallel, 2. not parrallel
+	if(para1 == true){
+		//The case that DA is parallel with BC
+		//Determine the line being parallel to DA and passing through Vt 
+		//that is, y = cx + r
+		float r = - c * x_T + y_T;
+
+		//this line intersects AB at point E
+		//AB: y = ax + b
+		float x_E = -(b - r) / (a - c);
+	}
+	else{
+		//The case that DA is not parallel with BC
 		//AB: y = ax + b
 		//I2Vt: y = gx + h
-		float g =  (float( y_I2 - y_t )) / ( x_I2 - x_t );
-		float h = -(float( y_I2 - y_t )) / ( x_I2 - x_t ) * x_t + y_t;
+		float g =  (float( y_I2 - y_T )) / ( x_I2 - x_T );
+		float h = -(float( y_I2 - y_T )) / ( x_I2 - x_T ) * x_T + y_T;
 
 		//Point E is the intersection of AB and I2Vt
 		float x_E = -(a - g) / (b - h);
 	}
 
-	//Find the x coordinate of point E while BC and DA are not parallel
-	if(para2 == false){
+	//Find the x coordinate of point F while BC and DA being, 1. parrallel, 2. not parrallel
+	if(para2 == true){
+		//The case that AB is parallel with CD
+		//Determine the line being parallel to AD and passing through Vt 
+		//that is, y = ax + r
+		float r = - a * x_T + y_T;
+
+		//this line intersects DA at point E
+		//DA: y = cx + d
+		float x_F = -(d - r) / (c - a);
+	}
+	else{
 		//DA: y = cx + d
 		//I1Vt: y = ex + f
-		float e =  (float( y_I1 - y_t )) / ( x_I1 - x_t );
-		float f = -(float( y_I1 - y_t )) / ( x_I1 - x_t ) * x_t + y_t;
+		float e =  (float( y_I1 - y_T )) / ( x_I1 - x_T );
+		float f = -(float( y_I1 - y_T )) / ( x_I1 - x_T ) * x_T + y_T;
 	
 		//Point F is the intersection of DA and I1Vt
 		float x_F = -(c - e) / (d - f);
 	}
 
-	//Set x_trans and y_trans
-	x_trans = int((x_E - x[0]) / (x[1] - x[0]) * width);
-	y_trans = int((x_F - x[0]) / (x[3] - x[0]) * height);
+	//Reciprocal of the cross ratio on line AI1
+	float k = ((x_I1 - x[0]) * (x[1] - x_E)) / ((x[1] - x[0]) * (x_I1 - x_E));
+	float l = ((x_I2 - x[0]) * (x[3] - x_F)) / ((x[3] - x[0]) * (x_I2 - x_F));
+
+	//Compute x_trans and y_trans
+	x_trans = int(k * width);
+	y_trans = int(l * height);
 
 	return;
 }
