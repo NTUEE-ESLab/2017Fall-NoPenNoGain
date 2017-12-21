@@ -50,6 +50,11 @@ void TrackCam::track(){
 		//Crop it
 		//bound = Rect(0, 0, 1200, 960);
 		im = im(bound);
+		cout << "Set bound as:" << endl;
+		cout << "   - x_start: " << bound.x << endl;
+		cout << "   - y_start: " << bound.y << endl;
+		cout << "   - width  : " << bound.width <<endl;
+		cout << "   - height : " << bound.height <<endl;
 
 		//Get the red part
 		cvtColor(~im, im_hsv_inv, COLOR_BGR2HSV);
@@ -186,8 +191,8 @@ void TrackCam::setBound(){
 
 	//Adjust the vertices' coordination due to the change of bound
 	for(int i=0; i<4; ++i){
-		x[i] += x_start;
-		y[i] += y_start;
+		x[i] -= x_start;
+		y[i] -= y_start;
 	}
 
 	//Print the result
