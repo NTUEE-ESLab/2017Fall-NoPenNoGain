@@ -19,6 +19,7 @@ class TrackCam{
 		Mat sceneIm;
 		int x[4], y[4];	//Observed positions of the target screen's vertices
 		int width, height;	//Target screen size
+		bool para1, para2;
 		//int bx0, bx1, bx2, by0, by1, by2; //For solving the coordination trasfering problem
 		float a, b;	//AB: y = ax + b
 		float c, d;	//DA: y = ax + b

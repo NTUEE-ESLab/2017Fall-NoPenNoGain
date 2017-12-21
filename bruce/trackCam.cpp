@@ -204,20 +204,31 @@ void TrackCam::setBound(){
 }
 
 void TrackCam::setIdealPoint(){
-	//Pass the case for being p
-	//AB: y = ax + b
-	//DA: y = cx + d
-	//CD: y = ex + f
-	//BC: y = gx + h
+	//Check if the edges are parallel
+	para1 = para2 = false;
+	if((x[3] - x[0]) == (x[2] - x[1])) para1 = true;
+	if((x[1] - x[0]) == (x[2] - x[3])) para2 = true;
+
 	float e, f, g, h;
-	a =  (float( y[1] - y[0] )) / (x[1] - x[0]);
-	b = -(float( y[1] - y[0] )) / (x[1] - x[0]) * x[0] + y[0];
-	c =  (float( y[2] - y[1] )) / (x[2] - x[1]);
-	d = -(float( y[2] - y[1] )) / (x[2] - x[1]) * x[2] + y[2];
-	e =  (float( y[2] - y[3] )) / (x[2] - x[3]);
-	f = -(float( y[2] - y[3] )) / (x[2] - x[3]) * x[3] + y[3];
-	g =  (float( y[3] - y[0] )) / (x[3] - x[0]);
-	h = -(float( y[3] - y[0] )) / (x[3] - x[0]) * x[3] + y[3];
+
+	//Set ideal point 1 if AB and CD are not "parallel enough"
+	if(para1 == true){
+		//AB: y = ax + b
+		//CD: y = ex + f
+		a =  (float( y[1] - y[0] )) / (x[1] - x[0]);
+		b = -(float( y[1] - y[0] )) / (x[1] - x[0]) * x[0] + y[0];
+		e =  (float( y[2] - y[3] )) / (x[2] - x[3]);
+		f = -(float( y[2] - y[3] )) / (x[2] - x[3]) * x[3] + y[3];
+	}
+	//Set ideal point 2 if BC and DA are not "parallel enough"
+	if(para2 == true){
+		//DA: y = cx + d
+		//BC: y = gx + h
+		c =  (float( y[2] - y[1] )) / (x[2] - x[1]);
+		d = -(float( y[2] - y[1] )) / (x[2] - x[1]) * x[2] + y[2];
+		g =  (float( y[3] - y[0] )) / (x[3] - x[0]);
+		h = -(float( y[3] - y[0] )) / (x[3] - x[0]) * x[3] + y[3];
+	}
 
 	//Compute the ideal points
 	//I1 is the intersection of AB and CD
