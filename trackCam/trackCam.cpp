@@ -7,8 +7,7 @@
 #include <raspicam/raspicam_cv.h>
 #include "trackCam.h"
 
-using namespace std::cout;
-using namespace std::endl;
+using namespace std;
 using namespace cv;
 
 TrackCam::~TrackCam(){
@@ -35,8 +34,6 @@ bool TrackCam::init(){
 
 void TrackCam::track(){
 	Mat im, im_hsv_inv, im_mask;
-	//Rect bound = getBound();
-	Rect bound = Rect(600, 300, 400, 500);
 	vector<Point> locations;
 	int x_ave = 0;
 	int y_ave = 0;
