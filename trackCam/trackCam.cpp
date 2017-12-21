@@ -313,20 +313,22 @@ void TrackCam::transformation(int x_T, int y_T, int &x_trans, int &y_trans){
 		x_F = - (d - f) / (c - e);
 	}
 
+	/*
 	cout<<"x_E at: "<<x_E<<endl;
 	cout<<"x_F at: "<<x_F<<endl;
 
 	char ccc;
 	cout<<"Press to continue"<<endl;
 	cin>>ccc;
-
+	*/
+	
 	//Reciprocal of the cross ratio on line AI1
 	float k = ((x_I1 - x[0]) * (x[1] - x_E)) / ((x[1] - x[0]) * (x_I1 - x_E));
 	float l = ((x_I2 - x[0]) * (x[3] - x_F)) / ((x[3] - x[0]) * (x_I2 - x_F));
 
 	//Compute x_trans and y_trans
-	x_trans = int(k * width);
-	y_trans = int(l * height);
+	x_trans = int((1 - k) * width);
+	y_trans = int((1 - l) * height);
 
 	return;
 }
