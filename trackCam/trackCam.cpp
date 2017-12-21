@@ -226,14 +226,14 @@ void TrackCam::setIdealPoint(){
 	if(para1 == false){
 		//AB: y = ax + b
 		//CD: y = ex + f
-		a =  (float( y[1] - y[0] )) / (x[1] - x[0]);
-		b = -(float( y[1] - y[0] )) / (x[1] - x[0]) * x[0] + y[0];
-		e =  (float( y[2] - y[3] )) / (x[2] - x[3]);
-		f = -(float( y[2] - y[3] )) / (x[2] - x[3]) * x[3] + y[3];
+		a = (float( y[1] - y[0] )) / (x[1] - x[0]);
+		b = - a * x[0] + y[0];
+		e = (float( y[2] - y[3] )) / (x[2] - x[3]);
+		f = - e * x[3] + y[3];
 
 		//I1 is the intersection of AB and CD
-		x_I1 = -(b - f) / (a - e);
-		y_I1 =  x_I1 * a + b;
+		x_I1 = - (b - f) / (a - e);
+		y_I1 = x_I1 * a + b;
 
 		//Print the result
 		cout << "Ideal point 1 at: (" << x_I1 << ", " << y_I1 << ")" << endl;
@@ -244,14 +244,14 @@ void TrackCam::setIdealPoint(){
 	if(para2 == false){
 		//DA: y = cx + d
 		//BC: y = gx + h
-		c =  (float( y[3] - y[0] )) / (x[3] - x[0]);
-		d = -(float( y[3] - y[0] )) / (x[3] - x[0]) * x[3] + y[3];
-		g =  (float( y[2] - y[1] )) / (x[2] - x[1]);
-		h = -(float( y[2] - y[1] )) / (x[2] - x[1]) * x[2] + y[2];
+		c = (float( y[3] - y[0] )) / (x[3] - x[0]);
+		d = - c * x[3] + y[3];
+		g = (float( y[2] - y[1] )) / (x[2] - x[1]);
+		h = - g * x[2] + y[2];
 
 		//I2 is the intersection of BC and DA
-		x_I2 = -(d - h) / (c - g);
-		y_I2 =  x_I2 * c + d;
+		x_I2 = - (d - h) / (c - g);
+		y_I2 = x_I2 * c + d;
 
 		//Print the result
 		cout << "Ideal point 2 at: (" << x_I2 << ", " << y_I2 << ")" << endl;
@@ -274,17 +274,17 @@ void TrackCam::transformation(int x_T, int y_T, int &x_trans, int &y_trans){
 
 		//this line intersects AB at point E
 		//AB: y = ax + b
-		x_E = -(b - r) / (a - c);
+		x_E = - (b - r) / (a - c);
 	}
 	else{
 		//The case that DA is not parallel with BC
 		//AB: y = ax + b
 		//I2Vt: y = gx + h
-		float g =  (float( y_I2 - y_T )) / ( x_I2 - x_T );
-		float h = -(float( y_I2 - y_T )) / ( x_I2 - x_T ) * x_T + y_T;
+		float g = (float( y_I2 - y_T )) / ( x_I2 - x_T );
+		float h = - g * x_T + y_T;
 
 		//Point E is the intersection of AB and I2Vt
-		x_E = -(a - g) / (b - h);
+		x_E = - (b - h) / (a - g);
 	}
 
 	//Find the x coordinate of point F while BC and DA being, 1. parrallel, 2. not parrallel
@@ -296,16 +296,16 @@ void TrackCam::transformation(int x_T, int y_T, int &x_trans, int &y_trans){
 
 		//this line intersects DA at point E
 		//DA: y = cx + d
-		x_F = -(d - r) / (c - a);
+		x_F = - (d - r) / (c - a);
 	}
 	else{
 		//DA: y = cx + d
 		//I1Vt: y = ex + f
-		float e =  (float( y_I1 - y_T )) / ( x_I1 - x_T );
-		float f = -(float( y_I1 - y_T )) / ( x_I1 - x_T ) * x_T + y_T;
+		float e = (float( y_I1 - y_T )) / ( x_I1 - x_T );
+		float f = - e * x_T + y_T;
 	
 		//Point F is the intersection of DA and I1Vt
-		x_F = -(c - e) / (d - f);
+		x_F = - (d - f) / (c - e);
 	}
 
 	cout<<"x_E at: "<<x_E<<endl;
