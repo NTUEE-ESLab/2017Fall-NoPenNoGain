@@ -7,7 +7,8 @@
 #include <raspicam/raspicam_cv.h>
 #include "trackCam.h"
 
-using namespace std;
+using namespace std::cout;
+using namespace std::endl;
 using namespace cv;
 
 TrackCam::~TrackCam(){
@@ -18,7 +19,7 @@ TrackCam::~TrackCam(){
 bool TrackCam::init(){
 	camera = new raspicam::RaspiCam_Cv;
 	if(!camera->open()){
-		cout<<"Camera failed!"<<endl;
+		cout << "Camera failed!" << endl;
 		return false;
 	}
 	lBound = Scalar(80, 80, 60);
@@ -75,8 +76,8 @@ void TrackCam::track(){
 		else x_ave = y_ave = -1;
 		
 		// Print the center of the signal in (origin | tranformed) coordinate
-		if(x_ave == -1) cout<<"\r(---, ---) | (---, ---)"<<flush;
-		else cout<<"\r("<<x_ave<<", "<<y_ave<<") | ("<<x_trans<<", "<<y_trans<<")            "<<flush;
+		if(x_ave == -1) cout << "\r(---, ---) | (---, ---)" << flush;
+		else cout << "\r(" << x_ave << ", " << y_ave << ") | (" << x_trans << ", " << y_trans << ")            " << flush;
 
 		//Draw the trace
 		//if(x_ave != -1 && x_pre != -1){
@@ -106,7 +107,7 @@ bool TrackCam::setScene(){
 
 	//Return false if any red object is detected
 	if(!locations.empty()){
-		cout<<"Dirty Scene!"<<endl;
+		cout << "Dirty Scene!" << endl;
 		return false;
 	}
 
@@ -128,7 +129,7 @@ void TrackCam::setVertex(){
 
 			//Count down on grabbibg action
 			for(int s=5; s>0; --s){
-				cout<<"\rCapturing calibration point "<<i<<" in: "<<s<<flush;
+				cout << "\rCapturing calibration point " << i << " in: " << s << flush;
 				this_thread::sleep_for(chrono::seconds(1));
 			}
 
@@ -152,7 +153,7 @@ void TrackCam::setVertex(){
 				}
 				x[i] /= pix_num;
 				y[i] /= pix_num;
-				cout<<"\rVertex "<<i<<" at ("<<x[i]<<", "<<y[i]<<")                   "<<endl;
+				cout << "\rVertex " << i << " at (" << x[i] << ", " << y[i] << ")                   " << endl;
 				end = true;
 			}
 		}
@@ -193,10 +194,10 @@ void TrackCam::setBound(){
 	}
 
 	//Print the result
-	cout<<"Bound: "<<endl;
-	cout<<"   - Origin: "<<"("<<x_start<<", "<<y_start<<")"<<endl;
-	cout<<"   - Width : "<<width<<endl;
-	cout<<"   - Height: "<<height<<endl;
+	cout << "Bound: " << endl;
+	cout << "   - Origin: " << "(" << x_start << ", " << y_start << ")" << endl;
+	cout << "   - Width : " << width << endl;
+	cout << "   - Height: " << height << endl;
 
 	return;
 }
@@ -206,20 +207,20 @@ void TrackCam::setIdealPoint(){
 	para1 = para2 = false;
 	
 	//The case if DA is parallel with BC
-	cout<<"The Vertical bounds: ";
+	cout << "The Vertical bounds: ";
 	if((x[3] - x[0]) * (y[2] - y[1]) == (x[2] - x[1]) * (y[3] - y[0])){
 		para1 = true;
-		cout<<"parallel";
+		cout << "parallel";
 	}
-	else cout<<"not parallel"<<endl;
+	else cout << "not parallel" << endl;
 
 	//The case if AB is parallel with DC
-	cout<<"The horizontal bounds: ";
+	cout << "The horizontal bounds: ";
 	if((x[1] - x[0]) * (y[2] - y[3]) == (x[2] - x[3]) * (y[1] - y[0])){
 		para2 = true;
-		cout<<"parallel";
+		cout << "parallel";
 	}
-	else cout<<"not parallel"<<endl;
+	else cout << "not parallel" << endl;
 
 	//Coefficients of the lines' equations
 	float e, f, g, h;
@@ -238,9 +239,9 @@ void TrackCam::setIdealPoint(){
 		y_I1 =  x_I1 * a + b;
 
 		//Print the result
-		cout<<"Ideal point 1 at: ("<<x_I1<<", "<<y_I1<<")"<<endl;
+		cout << "Ideal point 1 at: (" << x_I1 << ", " << y_I1 << ")" << endl;
 	}
-	else cout<<"No ideal point 1"<<endl;
+	else cout << "No ideal point 1" << endl;
 
 	//Set ideal point 2 if BC and DA are not parallel
 	if(para2 == false){
@@ -256,9 +257,9 @@ void TrackCam::setIdealPoint(){
 		y_I2 =  x_I2 * c + d;
 
 		//Print the result
-		cout<<"Ideal point 2 at: ("<<x_I2<<", "<<y_I2<<")"<<endl;
+		cout << "Ideal point 2 at: (" << x_I2 << ", " << y_I2 << ")" << endl;
 	}
-	else cout<<"No ideal point 2"<<endl;
+	else cout << "No ideal point 2" << endl;
 
 	return;
 }
