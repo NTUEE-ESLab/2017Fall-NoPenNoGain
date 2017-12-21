@@ -212,31 +212,32 @@ void TrackCam::setIdealPoint(){
 	float e, f, g, h;
 
 	//Set ideal point 1 if AB and CD are not "parallel enough"
-	if(para1 == true){
+	if(para1 == false){
 		//AB: y = ax + b
 		//CD: y = ex + f
 		a =  (float( y[1] - y[0] )) / (x[1] - x[0]);
 		b = -(float( y[1] - y[0] )) / (x[1] - x[0]) * x[0] + y[0];
 		e =  (float( y[2] - y[3] )) / (x[2] - x[3]);
 		f = -(float( y[2] - y[3] )) / (x[2] - x[3]) * x[3] + y[3];
+
+		//I1 is the intersection of AB and CD
+		x_I1 = -(b - f) / (a - e);
+		y_I1 =  x_I1 * a + b;
 	}
+
 	//Set ideal point 2 if BC and DA are not "parallel enough"
-	if(para2 == true){
+	if(para2 == false){
 		//DA: y = cx + d
 		//BC: y = gx + h
 		c =  (float( y[2] - y[1] )) / (x[2] - x[1]);
 		d = -(float( y[2] - y[1] )) / (x[2] - x[1]) * x[2] + y[2];
 		g =  (float( y[3] - y[0] )) / (x[3] - x[0]);
 		h = -(float( y[3] - y[0] )) / (x[3] - x[0]) * x[3] + y[3];
-	}
 
-	//Compute the ideal points
-	//I1 is the intersection of AB and CD
-	//I2 is the intersection of BC and DA
-	x_I1 = -(b - f) / (a - e);
-	y_I1 =  x_I1 * a + b;
-	x_I2 = -(h - d) / (g - c);
-	y_I2 =  x_I2 * g + h;
+		//I2 is the intersection of BC and DA
+		x_I2 = -(h - d) / (g - c);
+		y_I2 =  x_I2 * g + h;
+	}
 
 	//Print the result
 	cout<<"Ideal point 1 at: ("<<x_I1<<", "<<y_I1<<")"<<endl;
