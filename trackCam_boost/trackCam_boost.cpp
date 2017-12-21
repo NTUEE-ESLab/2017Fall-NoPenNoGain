@@ -88,6 +88,7 @@ void TrackCam::frame(){
 	time_t time_begin, time_end;
 	time(&time_begin);
 	while(!stop){
+		this_thread::sleep_for(chrono::milliseconds(10));
 		camera->grab();
 		camera->retrieve(sceneIm);
 		++camera_fps;
