@@ -1,0 +1,5 @@
+cmake_minimun_required( VERSON 2.8 )
+project( trackCam )
+find_package( OpenCV REQUIRED )
+add_executable( trackCam trackCam.cpp )
+target_link_libraries( trackCam ${OpenCV_LIBS} )
