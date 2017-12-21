@@ -26,7 +26,6 @@ bool TrackCam::init(){
 }
 
 void TrackCam::track(){
-	time_t time_begin, time_end;
 	Mat im_hsv_inv, im_mask;
 	//Rect bound = getBound();
 	Rect bound = Rect(600, 300, 400, 500);
@@ -37,12 +36,12 @@ void TrackCam::track(){
 	int y_pre = -1;
 	int pix_num = 0;
 
-	time(&time_begin);
+	auto start = std::chrono::high_resolution_clock::now();
 	for(int i=0; i<100; ++i){
 		//Catch a frame
 		// disappear!magic!
-		camera->grab();
-		camera->retrieve(sceneIm);
+		//camera->grab();
+		//camera->retrieve(sceneIm);
 		//Crop it
 		//sceneIm = sceneIm(bound);
 
@@ -75,18 +74,25 @@ void TrackCam::track(){
 		x_pre = x_ave;
 		y_pre = y_ave;
 	}
-	time(&time_end);
-
-	float s = difftime(time_end, time_begin);
+	stopFrame();
+	auto end = std::chrono::high_resolution_clock::now();
+	
+	std::chrono::duration<duoble, std::milli> elapsed = end - start;
+	cout << "Waits: " << elapsed << endl;
 	cout<<"fps: "<<(100/s)<<endl;
 	return;
 }
 
 void TrackCam::frame(){
+	int camera_fps = 0;
 	while(!stop){
+		this_thread::sleep_for(chrono::milliseconds(10));
 		camera->grab();
 		camera->retrieve(sceneIm);
+		++camera_fps;
 	}
+	float s = difftime(time_end, time_begin);
+	cout<<"truly fps: "<<(camera_fps/s)<<endl;
 }
 
 thread TrackCam::frameThread(){
