@@ -263,7 +263,7 @@ void TrackCam::setIdealPoint(){
 
 void TrackCam::transformation(int x_T, int y_T, int &x_trans, int &y_trans){
 	//
-	float x_F, x_E;
+	float x_E, x_F;
 
 	//Find the x coordinate of point E while BC and DA being, 1. parrallel, 2. not parrallel
 	if(para1 == true){
@@ -307,6 +307,13 @@ void TrackCam::transformation(int x_T, int y_T, int &x_trans, int &y_trans){
 		//Point F is the intersection of DA and I1Vt
 		x_F = -(c - e) / (d - f);
 	}
+
+	cout<<"x_E at: "<<x_E<<endl;
+	cout<<"x_F at: "<<x_F<<endl;
+
+	char ccc;
+	cout<<"Press to continue"<<endl;
+	cin>>ccc;
 
 	//Reciprocal of the cross ratio on line AI1
 	float k = ((x_I1 - x[0]) * (x[1] - x_E)) / ((x[1] - x[0]) * (x_I1 - x_E));
