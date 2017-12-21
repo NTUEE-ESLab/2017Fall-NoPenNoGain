@@ -13,11 +13,11 @@ int main(int argc, char **argv){
 		return -1;
 	cout<<"fine."<<endl;
 	
-	thread thread_frame = trackCam->frameThread();
+	//thread thread_frame = trackCam->frameThread();
 	trackCam->track();
 	
 	//trackCam->stop();
-	thread_frame.join();
+	//thread_frame.join();
 	return 0;
 }
 

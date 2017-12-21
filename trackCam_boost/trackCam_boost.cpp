@@ -37,10 +37,12 @@ void TrackCam::track(){
 	int y_pre = -1;
 	int pix_num = 0;
 
-	timer(&time_begin);
+	time(&time_begin);
 	for(int i=0; i<100; ++i){
 		//Catch a frame
 		// disappear!magic!
+		camera->grab();
+		camera->retrieve(sceneIm);
 		//Crop it
 		//sceneIm = sceneIm(bound);
 
