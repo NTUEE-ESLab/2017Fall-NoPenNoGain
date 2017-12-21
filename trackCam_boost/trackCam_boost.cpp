@@ -18,10 +18,9 @@ bool TrackCam::init(){
 	uBound = Scalar(100, 255, 255);
 	if(!setScene())
 		return false;
-	setVertex();
-	drawEdge();
-	setBound();
-	//setParam();
+	//setVertex();
+	//drawEdge();
+	//setBound();
 	return true;
 }
 
@@ -106,7 +105,7 @@ bool TrackCam::setScene(){
 	}
 	return true;
 }
-
+/*
 void TrackCam::setVertex(){
 	for(int i=0; i<4; ++i){
 		bool end = false;
@@ -196,5 +195,6 @@ void TrackCam::calibration(int x_t, int y_t, float &lamx, float &lamy){
 
 	return;
 }
+*/
 
 		

@@ -37,12 +37,12 @@ class TrackCam{
 
 		//Private functions
 		bool setScene();
-		void setVertex();
-		void drawEdge();
-		void setBound();
-		void setIdealPoint();
-		void transformation(int, int, float&, float&);
-		void setParam();
+		//void setVertex();
+		//void drawEdge();
+		//void setBound();
+		//void setIdealPoint();
+		//void transformation(int, int, float&, float&);
+		//void setParam();
 };
 
 #endif //TRACKCAM_H
