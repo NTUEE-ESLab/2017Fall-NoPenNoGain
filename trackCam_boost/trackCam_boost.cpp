@@ -1,4 +1,5 @@
 #include "trackCam_boost.h"
+#include <ctime>
 
 using namespace std;
 using namespace cv;
@@ -25,6 +26,7 @@ bool TrackCam::init(){
 }
 
 void TrackCam::track(){
+	time_t time_begin, time_end;
 	Mat im_hsv_inv, im_mask;
 	//Rect bound = getBound();
 	Rect bound = Rect(600, 300, 400, 500);
@@ -34,7 +36,9 @@ void TrackCam::track(){
 	int x_pre = -1;
 	int y_pre = -1;
 	int pix_num = 0;
-	while(true){
+
+	timer(&time_begin);
+	for(int i=0; i<100; ++i){
 		//Catch a frame
 		// disappear!magic!
 		//Crop it
@@ -69,6 +73,10 @@ void TrackCam::track(){
 		x_pre = x_ave;
 		y_pre = y_ave;
 	}
+	time(&time_end);
+
+	float s = difftime(time_end, time_begin);
+	cout<<"fps: "<<(100/s)<<endl;
 	return;
 }
 
