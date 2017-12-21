@@ -40,8 +40,8 @@ void TrackCam::track(){
 	for(int i=0; i<100; ++i){
 		//Catch a frame
 		// disappear!magic!
-		camera->grab();
-		camera->retrieve(sceneIm);
+		//camera->grab();
+		//camera->retrieve(sceneIm);
 		//Crop it
 		//sceneIm = sceneIm(bound);
 
