@@ -1,11 +1,14 @@
 #ifndef TRACKCAM_H
 #define TRACKCAM
-
 #include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <chrono>
+#include <thread>
 #include <opencv2/opencv.hpp>
 #include <raspicam/raspicam_cv.h>
 
-using namespace std::thread
+using namespace std;
 using namespace cv;
 
 class TrackCam{
@@ -14,7 +17,7 @@ class TrackCam{
 
 		bool init();
 		void track();
-		void frame()
+		void frame();
 		thread frameThread();
 		void stopFrame();
 	private:
@@ -39,6 +42,7 @@ class TrackCam{
 		void setBound();
 		void setIdealPoint();
 		void transformation(int, int, float&, float&);
+		void setParam();
 };
 
 #endif //TRACKCAM_H

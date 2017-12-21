@@ -1,10 +1,3 @@
-#include <iostream>
-#include <cmath>
-#include <algorithm>
-#include <chrono>
-#include <thread>
-#include <opencv2/opencv.hpp>
-#include <raspicam/raspicam_cv.h>
 #include "trackCam_boost.h"
 
 using namespace std;
@@ -91,7 +84,7 @@ thread TrackCam::frameThread(){
 	return thread([=] { frame();});
 }
 
-void stopFrame(){
+void TrackCam::stopFrame(){
 	stop = 1;
 }
 
