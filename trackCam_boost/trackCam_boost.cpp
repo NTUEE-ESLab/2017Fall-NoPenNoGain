@@ -36,12 +36,12 @@ void TrackCam::track(){
 	int y_pre = -1;
 	int pix_num = 0;
 
-	auto start = std::chrono::high_resolution_clock::now();
+	auto start = chrono::high_resolution_clock::now();
 	for(int i=0; i<100; ++i){
 		//Catch a frame
 		// disappear!magic!
-		//camera->grab();
-		//camera->retrieve(sceneIm);
+		camera->grab();
+		camera->retrieve(sceneIm);
 		//Crop it
 		//sceneIm = sceneIm(bound);
 
@@ -75,24 +75,23 @@ void TrackCam::track(){
 		y_pre = y_ave;
 	}
 	stopFrame();
-	auto end = std::chrono::high_resolution_clock::now();
+	auto end = chrono::high_resolution_clock::now();
 	
-	std::chrono::duration<duoble, std::milli> elapsed = end - start;
-	cout << "Waits: " << elapsed << endl;
-	cout<<"fps: "<<(100/s)<<endl;
+	chrono::duration<double, milli> elapsed = end - start;
+	cout << "Waits: " << elapsed.count() << endl;
+	//cout<<"fps: "<<(100/elapsed)<<endl;
 	return;
 }
 
 void TrackCam::frame(){
 	int camera_fps = 0;
 	while(!stop){
-		this_thread::sleep_for(chrono::milliseconds(10));
+		this_thread::sleep_for(chrono::milliseconds(100));
 		camera->grab();
 		camera->retrieve(sceneIm);
 		++camera_fps;
 	}
-	float s = difftime(time_end, time_begin);
-	cout<<"truly fps: "<<(camera_fps/s)<<endl;
+	cout<<"truly fps: "<<(camera_fps)<<endl;
 }
 
 thread TrackCam::frameThread(){
