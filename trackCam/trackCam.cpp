@@ -249,7 +249,7 @@ void TrackCam::setIdealPoint(){
 	return;
 }
 
-void TrackCam::transformation(int x_T, int y_T, float &x_trans, float &y_trans){
+void TrackCam::transformation(int x_T, int y_T, int &x_trans, int &y_trans){
 	//
 	float x_F, x_E;
 
