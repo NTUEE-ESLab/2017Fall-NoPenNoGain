@@ -41,8 +41,8 @@ void TrackCam::track(){
 	for(int i=0; i<100; ++i){
 		//Catch a frame
 		// disappear!magic!
-		camera->grab();
-		camera->retrieve(sceneIm);
+		//camera->grab();
+		//camera->retrieve(sceneIm);
 		//Crop it
 		//sceneIm = sceneIm(bound);
 
@@ -75,18 +75,26 @@ void TrackCam::track(){
 		x_pre = x_ave;
 		y_pre = y_ave;
 	}
+	stopFrame();
 	time(&time_end);
-
+	
 	float s = difftime(time_end, time_begin);
 	cout<<"fps: "<<(100/s)<<endl;
 	return;
 }
 
 void TrackCam::frame(){
+	int camera_fps = 0;
+	time_t time_begin, time_end;
+	time(&time_begin);
 	while(!stop){
 		camera->grab();
 		camera->retrieve(sceneIm);
+		++camera_fps;
 	}
+	time(&time_end);
+	float s = difftime(time_end, time_begin);
+	cout<<"truly fps: "<<(camera_fps/s)<<endl;
 }
 
 thread TrackCam::frameThread(){
