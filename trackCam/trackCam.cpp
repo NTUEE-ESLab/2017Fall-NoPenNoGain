@@ -204,12 +204,22 @@ void TrackCam::setBound(){
 void TrackCam::setIdealPoint(){
 	//Check if the edges are parallel
 	para1 = para2 = false;
+	
 	//The case if DA is parallel with BC
-	if((x[3] - x[0]) * (y[2] - y[1]) == (x[2] - x[1]) * (y[3] - y[0]))
+	cout<<"The Vertical bounds: ";
+	if((x[3] - x[0]) * (y[2] - y[1]) == (x[2] - x[1]) * (y[3] - y[0])){
 		para1 = true;
+		cout<<"parallel";
+	}
+	else cout<<"not parallel"<<endl;
+
 	//The case if AB is parallel with DC
-	if((x[1] - x[0]) * (y[2] - y[3]) == (x[2] - x[3]) * (y[1] - y[0]))
+	cout<<"The horizontal bounds: ";
+	if((x[1] - x[0]) * (y[2] - y[3]) == (x[2] - x[3]) * (y[1] - y[0])){
 		para2 = true;
+		cout<<"parallel";
+	}
+	else cout<<"not parallel"<<endl;
 
 	//Coefficients of the lines' equations
 	float e, f, g, h;
@@ -226,7 +236,11 @@ void TrackCam::setIdealPoint(){
 		//I1 is the intersection of AB and CD
 		x_I1 = -(b - f) / (a - e);
 		y_I1 =  x_I1 * a + b;
+
+		//Print the result
+		cout<<"Ideal point 1 at: ("<<x_I1<<", "<<y_I1<<")"<<endl;
 	}
+	else cout<<"No ideal point 1"<<endl;
 
 	//Set ideal point 2 if BC and DA are not parallel
 	if(para2 == false){
@@ -240,11 +254,11 @@ void TrackCam::setIdealPoint(){
 		//I2 is the intersection of BC and DA
 		x_I2 = -(d - h) / (c - g);
 		y_I2 =  x_I2 * c + d;
-	}
 
-	//Print the result
-	cout<<"Ideal point 1 at: ("<<x_I1<<", "<<y_I1<<")"<<endl;
-	cout<<"Ideal point 2 at: ("<<x_I2<<", "<<y_I2<<")"<<endl;
+		//Print the result
+		cout<<"Ideal point 2 at: ("<<x_I2<<", "<<y_I2<<")"<<endl;
+	}
+	else cout<<"No ideal point 2"<<endl;
 
 	return;
 }
