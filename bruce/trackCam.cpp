@@ -70,9 +70,7 @@ void TrackCam::track(){
 			y_ave /= pix_num;
 
 			//Transfer the coordinate
-			transformation(x_ave, y_ave, lamx, lamy);
-			x_trans = int(lamx * width);
-			y_trans = int(lamy * height);
+			transformation(x_ave, y_ave, x_trans, y_trans);
 		}
 		else x_ave = y_ave = -1;
 		
@@ -206,12 +204,10 @@ void TrackCam::setBound(){
 void TrackCam::setIdealPoint(){
 	//Check if the edges are parallel
 	para1 = para2 = false;
-	if((x[3] - x[0]) == (x[2] - x[1])) para1 = true;
-	if((x[1] - x[0]) == (x[2] - x[3])) para2 = true;
+	if((x[3] - x[0]) * (y[2] - y[1]) == (x[2] - x[1]) * (y[3] - y[0])) para1 = true;
+	if((x[1] - x[0]) * (y[2] - y[3]) == (x[2] - x[3]) * (y[1] - y[0])) para2 = true;
 
-	float e, f, g, h;
-
-	//Set ideal point 1 if AB and CD are not "parallel enough"
+	//Set ideal point 1 if AB and CD are not parallel
 	if(para1 == false){
 		//AB: y = ax + b
 		//CD: y = ex + f
@@ -225,10 +221,10 @@ void TrackCam::setIdealPoint(){
 		y_I1 =  x_I1 * a + b;
 	}
 
-	//Set ideal point 2 if BC and DA are not "parallel enough"
+	//Set ideal point 2 if BC and DA are not parallel
 	if(para2 == false){
-		//DA: y = cx + d
-		//BC: y = gx + h
+		//BC: y = cx + d
+		//DA: y = gx + h
 		c =  (float( y[2] - y[1] )) / (x[2] - x[1]);
 		d = -(float( y[2] - y[1] )) / (x[2] - x[1]) * x[2] + y[2];
 		g =  (float( y[3] - y[0] )) / (x[3] - x[0]);
@@ -246,24 +242,32 @@ void TrackCam::setIdealPoint(){
 	return;
 }
 
-void TrackCam::transformation(int x_t, int y_t, float &lamx, float &lamy){
-	//AB: y = ax + b
-	//DA: y = cx + d
-	//I1Vt: y = ex + f
-	//I2Vt: y = gx + h
-	float e =  (float( y_I1 - y_t )) / ( x_I1 - x_t );
-	float f = -(float( y_I1 - y_t )) / ( x_I1 - x_t ) * x_t + y_t;
-	float g =  (float( y_I2 - y_t )) / ( x_I2 - x_t );
-	float h = -(float( y_I2 - y_t )) / ( x_I2 - x_t ) * x_t + y_t;
+void TrackCam::transformation(int x_t, int y_t, float &x_trans, float &y_trans){
+	//Find the x coordinate of point E while BC and DA are not parallel
+	if(para1 == false){
+		//AB: y = ax + b
+		//I2Vt: y = gx + h
+		float g =  (float( y_I2 - y_t )) / ( x_I2 - x_t );
+		float h = -(float( y_I2 - y_t )) / ( x_I2 - x_t ) * x_t + y_t;
 
-	//E is the intersection of AB and I2Vt
-	//F is the intersection of DA and I1Vt
-	float x_E = -(a - g) / (b - h);
-	float x_F = -(c - e) / (d - f);
+		//Point E is the intersection of AB and I2Vt
+		float x_E = -(a - g) / (b - h);
+	}
 
-	//Set lamx and lamy
-	lamx = (x_E - x[0]) / (x[1] - x[0]);
-	lamy = (x_F - x[0]) / (x[3] - x[0]);
+	//Find the x coordinate of point E while BC and DA are not parallel
+	if(para2 == false){
+		//DA: y = cx + d
+		//I1Vt: y = ex + f
+		float e =  (float( y_I1 - y_t )) / ( x_I1 - x_t );
+		float f = -(float( y_I1 - y_t )) / ( x_I1 - x_t ) * x_t + y_t;
+	
+		//Point F is the intersection of DA and I1Vt
+		float x_F = -(c - e) / (d - f);
+	}
+
+	//Set x_trans and y_trans
+	x_trans = int((x_E - x[0]) / (x[1] - x[0]) * width);
+	y_trans = int((x_F - x[0]) / (x[3] - x[0]) * height);
 
 	return;
 }
