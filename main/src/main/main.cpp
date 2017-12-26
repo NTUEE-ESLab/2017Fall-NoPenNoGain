@@ -10,7 +10,7 @@
 #include "trackCam.cpp"
 
 
-
+// include c
 extern "C"{
 	#include <stdio.h>
 	#include <stdlib.h>
