@@ -13,13 +13,13 @@ using namespace cv;
 
 class TrackCam{
 	public:
-		inline ~TrackCam();
+		~TrackCam();
 
-		inline bool init();
-		inline void track();
-		inline void frame();
-		inline thread frameThread();
-		inline void stopFrame();
+		bool init();
+		void track();
+		void frame();
+		thread frameThread();
+		void stopFrame();
 	private:
 		//Private Variables
 		raspicam::RaspiCam_Cv* camera;
@@ -36,7 +36,7 @@ class TrackCam{
 		bool stop = 0; //flag for stopping the frame thread
 
 		//Private functions
-		inline bool setScene();
+		bool setScene();
 		//void setVertex();
 		//void drawEdge();
 		//void setBound();

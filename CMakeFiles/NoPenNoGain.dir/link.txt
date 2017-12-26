@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/NoPenNoGain.dir/main.c.o CMakeFiles/NoPenNoGain.dir/calc.c.o  -o NoPenNoGain -rdynamic 

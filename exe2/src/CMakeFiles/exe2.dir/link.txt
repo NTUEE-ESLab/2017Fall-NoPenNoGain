@@ -1,1 +1,0 @@
-/usr/bin/cc     CMakeFiles/exe2.dir/main.c.o CMakeFiles/exe2.dir/calc.c.o  -o exe2 -rdynamic 

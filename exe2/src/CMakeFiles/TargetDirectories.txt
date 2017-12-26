@@ -1,3 +1,0 @@
-/home/pi/Desktop/final/NoPenNoGain/exe2/src/CMakeFiles/rebuild_cache.dir
-/home/pi/Desktop/final/NoPenNoGain/exe2/src/CMakeFiles/edit_cache.dir
-/home/pi/Desktop/final/NoPenNoGain/exe2/src/CMakeFiles/exe2.dir
