@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/pi/Desktop/final/NoPenNoGain/exe2/src/calc.c
+
+/home/pi/Desktop/final/NoPenNoGain/exe2/src/calc.h
+
+/home/pi/Desktop/final/NoPenNoGain/exe2/src/main.c
+stdio.h
+-
+calc.h
+/home/pi/Desktop/final/NoPenNoGain/exe2/src/calc.h
+

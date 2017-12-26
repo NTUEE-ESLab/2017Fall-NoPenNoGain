@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/haha.dir/main.c.o CMakeFiles/haha.dir/calc.c.o  -o haha 
