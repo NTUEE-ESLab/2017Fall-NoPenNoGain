@@ -43,7 +43,7 @@ void TrackCam::track(){
 		//camera->grab();
 		//camera->retrieve(sceneIm);
 		//Crop it
-		//sceneIm = sceneIm(bound);
+		sceneIm = sceneIm(bound);
 
 		//Get the red part
 		cvtColor(~sceneIm, im_hsv_inv, COLOR_BGR2HSV);
@@ -64,8 +64,8 @@ void TrackCam::track(){
 		else x_ave = y_ave = -1;
 		
 		// Print the center of the signal
-		if(x_ave == -1) cout<<"\r(---, ---)"<<flush;
-		else cout<<"\r("<<x_ave<<", "<<y_ave<<")"<<flush;
+		//if(x_ave == -1) cout<<"\r(---, ---)"<<flush;
+		//else cout<<"\r("<<x_ave<<", "<<y_ave<<")"<<flush;
 
 		//if(x_ave != -1 && x_pre != -1){
 		//	line(im_track, Point(x_pre, y_pre), Point(x_ave, y_ave), Scalar(0, 255, 0), 5);

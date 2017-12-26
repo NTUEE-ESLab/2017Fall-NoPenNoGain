@@ -1,3 +1,0 @@
-/home/pi/Desktop/final/NoPenNoGain/trackCam_boost/CMakeFiles/rebuild_cache.dir
-/home/pi/Desktop/final/NoPenNoGain/trackCam_boost/CMakeFiles/edit_cache.dir
-/home/pi/Desktop/final/NoPenNoGain/trackCam_boost/CMakeFiles/trackCam.dir
