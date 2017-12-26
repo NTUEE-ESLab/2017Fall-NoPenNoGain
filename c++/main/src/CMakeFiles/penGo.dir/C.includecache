@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/pi/Desktop/final/NoPenNoGain/main/src/gattlib_common.c
+gattlib_internal.h
+/home/pi/Desktop/final/NoPenNoGain/main/src/gattlib_internal.h
+

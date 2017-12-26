@@ -7,6 +7,7 @@ project(penGo)
 find_package(OpenCV REQUIRED)
 find_package(raspicam REQUIRED)
 find_package(Threads REQUIRED)
+#find_package(gattlib REQUIRED)
 
 #add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES})
 SET(SRC_LIST main.cpp
@@ -18,4 +19,5 @@ ADD_EXECUTABLE(${PROJECT_NAME} ${SRC_LIST})
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 target_link_libraries(${PROJECT_NAME} ${raspicam_LIBS})
 target_link_libraries(${PROJECT_NAME} ${raspicam_CV_LIBS})
+#target_link_libraries(${PROJECT_NAME} ${gattlib_LIBS})
 target_link_libraries(${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
