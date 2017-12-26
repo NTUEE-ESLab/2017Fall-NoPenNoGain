@@ -8,7 +8,7 @@ find_package(OpenCV REQUIRED)
 find_package(raspicam REQUIRED)
 find_package(Threads REQUIRED)
 
-#IF (OpenCV_FOUND AND raspicam_CV_FOUND)
+#IF(OpenCV_FOUND AND raspicam_CV_FOUND)
 #MESSAGE(STATUS "COMPILING OPENCV")
 
 # Build a shared library named after the project from the files in `src/`"
