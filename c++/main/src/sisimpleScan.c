@@ -16,10 +16,10 @@ int main(int argc, char **argv)
     char addr[19] = { 0 };
     char name[248] = { 0 };
 
-    dev_id = hci_get_route(NULL);
-    sock = hci_open_dev( dev_id );
+    dev_id = hci_get_route(NULL);printf("dev_id:%d", dev_id);
+    sock = hci_open_dev( dev_id );printf("sock:%d", sock);
     if (dev_id < 0 || sock < 0) {
-        perror("opening socket");
+        perror("opening socket!!");
         exit(1);
     }
 
@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     
     num_rsp = hci_inquiry(dev_id, len, max_rsp, NULL, &ii, flags);
     if( num_rsp < 0 ) perror("hci_inquiry");
-
+    printf("num_rsp = %d", num_rsp);
     for (i = 0; i < num_rsp; i++) {
         ba2str(&(ii+i)->bdaddr, addr);
         memset(name, 0, sizeof(name));
