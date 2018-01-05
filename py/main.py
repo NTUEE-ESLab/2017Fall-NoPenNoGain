@@ -61,10 +61,8 @@ def main():
         print(data)
         data_byte = str.encode(str(data))
         data = ''
-        echo.write(data_byte, withResponse=False)
-	
-	echo.waitForNotifications(5.0)
-
+        echo.write(data_byte, withResponse=True)
+        dev.waitForNotifications(5.0)
         print('writing')
         print(time.time())
 		

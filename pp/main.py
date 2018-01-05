@@ -2,18 +2,20 @@ import numpy as np
 import time
 import cv2
 from picamera import PiCamera
+from picamera.array import PiRGBArray
 
 class TrackCam:
    def __init__(self):
       self.camera = PiCamera()
-      self.rawCapture = PiRGBArray(self.camera)
+      self.camera.resolution = (1200, 960)
+      self.rawCapture = PiRGBArray(self.camera, size = (1216,960))
       self.scene = self.setScene()
       self.vertex = self.setVertex()
 
    def getPoint(self):
       # Get the masked image
       self.camera.capture(self.rawCapture, format="bgr")
-      im = rawCapture.array
+      im = self.rawCapture.array
       im_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
       # lower mask
       lowRed = np.array([0,50,50])
@@ -39,10 +41,9 @@ class TrackCam:
       return [x_ave / pixelNum, y_ave / pixelNum]
 
    def setScene(self):
-      self.camera.capture(rawCapture, format="bgr")
+      self.camera.capture(self.rawCapture, format="bgr")
       im = self.rawCapture.array
       cv2.imwrite('./SceneIm.jpg', im)
-      input()
       if(not self.getPoint() == [-1, -1]):
          print('Dirty scene!')
          return None
