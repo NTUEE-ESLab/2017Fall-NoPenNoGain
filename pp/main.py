@@ -43,7 +43,8 @@ class TrackCam:
 		return [x_ave / pixelNum, y_ave / pixelNum]
 
 	def setScene(self):
-		im = self.cap.read()
+		ret, im = self.cap.read()
+		print(self.cap.isOpened())
 
 		cv2.imwrite('./SceneIm.jpg', im)
 
