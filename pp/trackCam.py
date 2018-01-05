@@ -49,7 +49,7 @@ class TrackCam:
 				print('Getting vertex ', i)
 				time.sleep(5)
 			x, y = getPoint()
-			
+		return None
 
 
 
