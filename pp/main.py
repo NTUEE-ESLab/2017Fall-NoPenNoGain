@@ -10,7 +10,7 @@ class TrackCam:
 
 	def getPoint(self):
 		# Get the masked image
-		im = self.cap.read()
+		im = self.cap.read()[1]
 		im_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
 
 		# lower mask
