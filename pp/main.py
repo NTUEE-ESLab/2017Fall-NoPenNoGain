@@ -1,8 +1,8 @@
 import trackCam
 
 def main():
-	trackCam = TrackCma()
-	
+	trackCam = TrackCam()
+
 
 if(__name__ == '__main__'):
 	main()
