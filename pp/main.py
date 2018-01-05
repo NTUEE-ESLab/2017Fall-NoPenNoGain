@@ -44,6 +44,10 @@ class TrackCam:
 
 	def setScene(self):
 		im = self.cap.read()
+
+		cv2.imwrite('./SceneIm.jpg', im)
+
+		input()
 		if(not self.getPoint() == [-1, -1]):
 			print('Dirty scene!')
 			return None
