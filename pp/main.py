@@ -5,17 +5,26 @@ import cv2
 class TrackCam:
 	def __init__(self):
 		self.cap = cv2.VideoCapture(0)
-		self.lowRed = np.array([80, 80, 60])
-		self.uppRed = np.array([100, 255, 255])
 		self.scene = self.setScene()
 		self.vertex = self.setVertex()
 
 	def getPoint(self):
 		# Get the masked image
 		im = self.cap.read()
-		im_inv = ~im
-		im_hsv = cv2.cvtColor(im_inv, cv2.COLOR_BGR2HSV)
-		im_mask = cv2.inRange(im_hsv, self.lowRed, self.uppRed)
+		im_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
+
+		# lower mask
+		lowRed = np.array([0,50,50])
+		uppRed = np.array([10,255,255])
+		im_mask0 = cv2.inRange(img_hsv, lowRed, uppRed)
+
+		# upper mask
+		lowRed = np.array([170,50,50])
+		uppRed = np.array([180,255,255])
+		im_mask1 = cv2.inRange(img_hsv, lowRed, uppRed)
+
+		# join the masks
+		im_mask = im_mask0 + im_mask1
 
 		# Get the non-zero part
 		location = cvs.findNonZero(im_mask)
