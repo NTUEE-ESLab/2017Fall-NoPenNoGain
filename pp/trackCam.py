@@ -31,7 +31,7 @@ class TrackCam:
 			x_ave += location[i][0]
 			y_ave += location[i][1]
 		
-		return [x_ave /= pixelNum, y_ave /= pixelNum]
+		return [x_ave / pixelNum, y_ave / pixelNum]
 
 	def setScene(self):
 		im = self.cap.read()
