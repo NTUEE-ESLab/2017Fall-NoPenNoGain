@@ -172,25 +172,20 @@ class TrackCam:
 
         k = ((self.I1[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / np.clip(((self.vertex[1][0]-self.vertex[0][0]) * (self.I1[0] - x_E)), m, M)
         l = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[3][0]-x_F)) / np.clip(((self.vertex[3][0]-self.vertex[0][0]) * (self.I2[0] - x_F)), m, M)
-
-        x_trans = int(round((1 - k) * self.width))
-        y_trans = int(round((1 - l) * self.height))
-
-        return [x_trans, y_trans]
+        
+        return [(1 - k), (1 - l)]
 
     def track(self):
         while(True):
             im = self.getIm()
-            cv2.imwrite('iim.jpg', im)
             im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
-            cv2.imwrite('iiim.jpg', im)
             x_ave, y_ave = self.getPoint(im)
-            x_trans, y_trans = self.transformation(x_ave, y_ave)
+            x_ratio, y_ratio = self.transformation(x_ave, y_ave)
 
             if(x_ave == -1):
                 print('(---, ---) | (---, ---)')
             else:
-                print('(', x_ave, ', ', y_ave, ') | (', x_trans, ', ', y_trans, ')')
+                print('(', x_ave, ', ', y_ave, ') | (', x_ratio, ', ', y_ratio, ')')
 
 
 
