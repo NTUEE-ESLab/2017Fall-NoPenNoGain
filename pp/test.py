@@ -9,8 +9,8 @@ camera.resolution = (1216, 960)
 
 output = np.empty((1216*960*3), dtype = np.uint8)
 camera.capture(output, 'bgr')
-output = output.reshape(1216, 960, 3)
-output = output[:1200, :960, ]
+output = output.reshape(960,1216, 3)
+output = output[:, :1200, ]
 
 im = output
 x = y = 0
