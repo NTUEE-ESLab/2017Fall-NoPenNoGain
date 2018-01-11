@@ -95,7 +95,8 @@ class TrackCam:
         return [x_start, y_start, width, height]
 
     def setIdealPoint(self):
-        m = 0.000000001
+        m = 0.00000001
+        M = 100000000
         I1 = I2 = [0, 0]
         print('Are vertical bounds parallel: ')
         if((self.vertex[3][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[1][1]) == (self.vertex[2][0]-self.vertex[1][0])*(self.vertex[3][1]-self.vertex[0][1])):
