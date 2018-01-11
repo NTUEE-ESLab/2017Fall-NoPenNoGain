@@ -4,6 +4,9 @@ import cv2
 from picamera import PiCamera
 from picamera.array import PiRGBArray
 
+m = 0.00000001
+M = 100000000
+
 class TrackCam:
     def __init__(self):
         self.cap = cv2.VideoCapture(0)
@@ -95,8 +98,6 @@ class TrackCam:
         return [x_start, y_start, width, height]
 
     def setIdealPoint(self):
-        m = 0.00000001
-        M = 100000000
         I1 = I2 = [0, 0]
         print('Are vertical bounds parallel: ')
         if((self.vertex[3][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[1][1]) == (self.vertex[2][0]-self.vertex[1][0])*(self.vertex[3][1]-self.vertex[0][1])):
@@ -154,8 +155,8 @@ class TrackCam:
             f = - e * x_T + y_T
             x_F = - (self.d - f) / (self.c - e)
 
-        k = ((self.I1[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / clip(((self.vertex[1][0]-self.vertex[0][0]) * (self.I1[0] - x_E)), m, M)
-        l = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[3][0]-x_F)) / clip(((self.vertex[3][0]-self.vertex[0][0]) * (self.I2[0] - x_F)), m, M)
+        k = ((self.I1[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / np.clip(((self.vertex[1][0]-self.vertex[0][0]) * (self.I1[0] - x_E)), m, M)
+        l = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[3][0]-x_F)) / np.clip(((self.vertex[3][0]-self.vertex[0][0]) * (self.I2[0] - x_F)), m, M)
 
         x_trans = int(round((1 - k) * self.width))
         y_trans = int(round((1 - l) * self.height))
