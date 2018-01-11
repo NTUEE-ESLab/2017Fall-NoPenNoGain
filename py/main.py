@@ -11,8 +11,8 @@ from picamera.array import PiRGBArray
 m = 0.00000001
 M = 100000000
 
-x = 1.
-y = 1.
+X = 0
+Y = 0
 
 right_button = False
 left_button = False
@@ -33,6 +33,8 @@ class TrackCam:
         self.a = self.b = self.c = self.d = 0
         self.para1 = self.para2 = False
         self.I1, self.I2 = self.setIdealPoint()
+        self.x_ratio = 0.
+	self.y_ratio = 0.
 
     def getIm(self):
         output = np.empty((960*1216*3), dtype = np.uint8)
@@ -228,6 +230,9 @@ class TrackCam:
             return [-1, -1]
         return [(1 - k), (1 - l)]
 
+    def getXY(self):
+        return self.x_ratio, self.y_ratio
+
     def track(self):
         while(True):
             input()
@@ -238,11 +243,11 @@ class TrackCam:
             if(x_ave == -1):
                 print('(---, ---) | (---, ---)')
             else:
-                x_ratio, y_ratio = self.transformation(x_ave, y_ave)
-                if(x_ratio == -1):
+                self.x_ratio, self.y_ratio = self.transformation(x_ave, y_ave)
+                if(self.x_ratio == -1):
                     print('(---, ---) | (---, ---)')
                 else:
-                    print('(', x_ave, ', ', y_ave, ') | (', x_ratio, ', ', y_ratio, ')')
+                    print('(', x_ave, ', ', y_ave, ') | (', self.x_ratio, ', ', self.y_ratio, ')')
 
 
 
@@ -272,6 +277,9 @@ def ble_thread1(cv1, cv2, cv3, echo):
     while True:
         cv1.acquire()
         cv1.wait()
+        data = str(X)
+	data += str(Y)
+        data_byte = str.encode(str(data))
         echo.write(data_byte, withResponse=True)
         cv1.release()
 
@@ -280,10 +288,14 @@ def ble_thread1(cv1, cv2, cv3, echo):
         cv3.release()
     
 def ble_thread2(cv3, cv1, rspi):
+    count = False
     while True:
-        cv3.acquire()
-        cv3.wait()
-        cv3.release()
+        if count:
+            cv3.acquire()
+            cv3.wait()
+            cv3.release()
+	else:
+            count = True
         	
         cv1.acquire()
         raw = rspi.readCharacteristic()
@@ -303,43 +315,31 @@ def main():
     rspi = dev_rpi.getCharacteristics()[-1]
 
     print('Connecting successfully!')
+
+    trackCam = TrackCam()
     
     condition1 = threading.Condition()
-    condition2 = threading.Condition()
+    #condition2 = threading.Condition()
     condition3 = threading.Condition()
-    ble_com = threading.Thread(name='com', target=ble_thread1, args=(condition1, condition2, condition3, echo,))
-    ble_rpi = threading.Thread(name='rpi', target=ble_thread2, args=(condition2, condition3,rspi,))
+    ble_com = threading.Thread(name='com', target=ble_thread1, args=(condition1, condition3, echo,))
+    ble_rpi = threading.Thread(name='rpi', target=ble_thread2, args=(condition1, condition3, rspi,))
 
-    cs1.start()
-    time.sleep(2)
-    cs2.start()
-    time.sleep(2)
-    pd.start()
+    ble_com.start()
+    #time.sleep(2)
+    ble_rpi.start()
+    #time.sleep(2)
 
-    #vs = myStream(src = 0).start()
-    data = ''
     count = False;
     while True:
+        trackCam.track()
 	if count:
 	    cv3.acquire()
             cv3.wait()
+            X, Y = trackCam.getXY()
             cv3.release()
 	else:
+            X, Y = trackCam.getXY()
             count = True
 	
-	
-	
-        data_byte = str.encode(str(data))
-        data = ''
-        echo.write(data_byte, withResponse=True)
-        dev_comp.waitForNotifications(5.0)
-        #print('writing')
-        #print(time.time())
-	cv.acquire()
-        
-        cv.notify()
-        cv.release()
-		
-
 if __name__ == "__main__":
 	main()
