@@ -73,7 +73,7 @@ class TrackCam:
                 print('Getting vertex ', i)
                 time.sleep(3)
                 im = self.getIm()
-                x, y = self.getPoint(im)
+                x, y = self.getPoint(im, True)
                 if(not x == -1):
                     ver.append([x, y])
                     print('Get vertex ', i, 'as (', x, ', ', y, ')')
@@ -177,9 +177,10 @@ class TrackCam:
 
     def track(self):
         while(True):
+            input()
             im = self.getIm()
             im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
-            x_ave, y_ave = self.getPoint(im)
+            x_ave, y_ave = self.getPoint(im, True)
             x_ratio, y_ratio = self.transformation(x_ave, y_ave)
 
             if(x_ave == -1):
