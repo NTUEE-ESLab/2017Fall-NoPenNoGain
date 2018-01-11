@@ -16,6 +16,11 @@ paintScene::~paintScene()
 
 void paintScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+    std::unique_lock<std::mutex> lk(m);
+    click = true;
+    lk.unlock();
+    cv.notify_one();
+    
     nowPoint=event->scenePos();
     switch (mypen)
     {

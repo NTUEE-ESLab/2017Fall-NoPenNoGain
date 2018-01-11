@@ -15,8 +15,7 @@ if __name__ == '__main__' :
  
     tracker_types = ['BOOSTING', 'MIL','KCF', 'TLD', 'MEDIANFLOW', 'GOTURN']
     tracker_type = tracker_types[2]
- 
-    if int(minor_ver) < 3:
+    if 1:
         tracker = cv2.Tracker_create(tracker_type)
     else:
         if tracker_type == 'BOOSTING':
@@ -43,7 +42,7 @@ if __name__ == '__main__' :
  
     # Exit if video not opened.
     if not video.isOpened():
-        print "Could not open video"
+        print ("Could not open video")
         sys.exit()
  
     # Read first frame.

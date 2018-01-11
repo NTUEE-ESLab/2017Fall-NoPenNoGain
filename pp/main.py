@@ -34,11 +34,12 @@ class TrackCam:
         im_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
         # lower mask
         lowRed = np.array([70,90,50])
-        uppRed = np.array([100,255,255])
+        uppRed = np.array([110,255,255])
         im_mask = cv2.inRange(im_hsv, lowRed, uppRed)
 
 
         if(save == True):
+            cv2.imwrite('./im'+str(self.idx)+'.jpg', im)
             cv2.imwrite('./mask'+str(self.idx)+'.jpg', im_mask)
             self.idx += 1
 
@@ -73,7 +74,7 @@ class TrackCam:
                 print('Getting vertex ', i)
                 time.sleep(3)
                 im = self.getIm()
-                x, y = self.getPoint(im)
+                x, y = self.getPoint(im, True)
                 if(not x == -1):
                     ver.append([x, y])
                     print('Get vertex ', i, 'as (', x, ', ', y, ')')
@@ -172,25 +173,21 @@ class TrackCam:
 
         k = ((self.I1[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / np.clip(((self.vertex[1][0]-self.vertex[0][0]) * (self.I1[0] - x_E)), m, M)
         l = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[3][0]-x_F)) / np.clip(((self.vertex[3][0]-self.vertex[0][0]) * (self.I2[0] - x_F)), m, M)
-
-        x_trans = int(round((1 - k) * self.width))
-        y_trans = int(round((1 - l) * self.height))
-
-        return [x_trans, y_trans]
+        
+        return [(1 - k), (1 - l)]
 
     def track(self):
         while(True):
+            input()
             im = self.getIm()
-            cv2.imwrite('iim.jpg', im)
             im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
-            cv2.imwrite('iiim.jpg', im)
-            x_ave, y_ave = self.getPoint(im)
-            x_trans, y_trans = self.transformation(x_ave, y_ave)
+            x_ave, y_ave = self.getPoint(im, True)
+            x_ratio, y_ratio = self.transformation(x_ave, y_ave)
 
             if(x_ave == -1):
                 print('(---, ---) | (---, ---)')
             else:
-                print('(', x_ave, ', ', y_ave, ') | (', x_trans, ', ', y_trans, ')')
+                print('(', x_ave, ', ', y_ave, ') | (', x_ratio, ', ', y_ratio, ')')
 
 
 
