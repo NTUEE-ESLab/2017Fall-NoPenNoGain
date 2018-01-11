@@ -89,8 +89,8 @@ class TrackCam:
         height = max(self.vertex[3][1], self.vertex[2][1]) - y_start
 
         for i in range(4):
-        	self.vertex[i][0] -= x_start
-        	self.vertex[i][1] -= y_start
+            self.vertex[i][0] -= x_start
+            self.vertex[i][1] -= y_start
 
         return [x_start, y_start, width, height]
 
@@ -137,7 +137,7 @@ class TrackCam:
         return I1, I2
 
     def transformation(self, x_T, y_T):
-    	x_E = x_F = 0
+        x_E = x_F = 0
         if(para1 == True):
             r = - self.c * x_T + y_T
             x_E = - (self.b - r) / (self.a - self.c)
