@@ -48,7 +48,7 @@ class TrackCam:
 
         if(save == True):
             cv2.imwrite('./mask'+str(idx)+'.jpg', im_mask)
-            id += 1
+            idx += 1
         
         return [x_ave // pixelNum, y_ave // pixelNum]
 
