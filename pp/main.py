@@ -154,11 +154,11 @@ class TrackCam:
             f = - e * x_T + y_T
             x_F = - (self.d - f) / (self.c - e)
 
-        k = ((self.I1[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / ((self.vertex[1][0]-self.vertex[0][0]) * (self.I1[0] - x_E))
-        l = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[3][0]-x_F)) / ((self.vertex[3][0]-self.vertex[0][0]) * (self.I2[0] - x_F))
+        k = ((self.I1[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / clip(((self.vertex[1][0]-self.vertex[0][0]) * (self.I1[0] - x_E)), m, M)
+        l = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[3][0]-x_F)) / clip(((self.vertex[3][0]-self.vertex[0][0]) * (self.I2[0] - x_F)), m, M)
 
-        x_trans = (1 - k) * self.width // 1
-        y_trans = (1 - l) * self.height // 1
+        x_trans = int(round((1 - k) * self.width))
+        y_trans = int(round((1 - l) * self.height))
 
         return [x_trans, y_trans]
 
