@@ -39,8 +39,8 @@ class TrackCam:
 
 
         if(save == True):
-            cv2.imwrite('./im'+str(self.idx)+'.jpg', im)
-            cv2.imwrite('./mask'+str(self.idx)+'.jpg', im_mask)
+            cv2.imwrite('./record/im'+str(self.idx)+'.jpg', im)
+            cv2.imwrite('./record/mask'+str(self.idx)+'.jpg', im_mask)
             self.idx += 1
 
 
