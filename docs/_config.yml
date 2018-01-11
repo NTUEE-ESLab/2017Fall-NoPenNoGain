@@ -1,4 +1,0 @@
-# Build settings
-markdwon: kramdown
-theme: jekyll-theme-merlot
-remote_theme: benbalter/retlab
