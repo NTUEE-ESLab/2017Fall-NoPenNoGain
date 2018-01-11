@@ -39,7 +39,7 @@ class TrackCam:
         im_mask = im_mask0 + im_mask1
         # Get the non-zero part
         location = cv2.findNonZero(im_mask)
-        if(location == None):
+        if(not location):
             return[-1, -1]
         pixelNum = len(location)
         x_ave = y_ave = 0
@@ -110,9 +110,9 @@ class TrackCam:
         else:
             print('No')
         if(self.para1 == False):
-            self.a = (self.vertex[1][1]-self.vertex[0][1]) / clip((self.vertex[1][0]-self.vertex[0][0]), m, M) 
+            self.a = (self.vertex[1][1]-self.vertex[0][1]) / np.clip((self.vertex[1][0]-self.vertex[0][0]), m, M) 
             self.b = - self.a * self.vertex[0][0] + self.vertex[0][1]
-            e = (self.vertex[2][1]-self.vertex[3][1]) / clip((self.vertex[2][0]-self.vertex[3][0]), m, M)
+            e = (self.vertex[2][1]-self.vertex[3][1]) / np.clip((self.vertex[2][0]-self.vertex[3][0]), m, M)
             f = - e * self.vertex[3][0] + self.vertex[3][1]
 
             I1[0] = - (self.b - f) / (self.a - e)
@@ -122,9 +122,9 @@ class TrackCam:
         else:
             print('No ideal point 1')
         if(self.para2 == False):
-            self.c = (self.vertex[3][1]-self.vertex[0][1]) / clip((self.vertex[3][0]-self.vertex[0][0]), m, M)
+            self.c = (self.vertex[3][1]-self.vertex[0][1]) / np.clip((self.vertex[3][0]-self.vertex[0][0]), m, M)
             self.d = - self.c * self.vertex[3][0] + self.vertex[3][1]
-            g = (self.vertex[2][1]-self.vertex[1][1]) / clip((self.vertex[2][0]-self.vertex[1][0]), m, M)
+            g = (self.vertex[2][1]-self.vertex[1][1]) / np.clip((self.vertex[2][0]-self.vertex[1][0]), m, M)
             h = - g * self.vertex[2][0] + self.vertex[2][1]
 
             I2[0] = - (self.d - h) / (self.c - g)
