@@ -6,6 +6,7 @@ from picamera.array import PiRGBArray
 
 m = 0.00000001
 M = 100000000
+id = 0
 
 class TrackCam:
     def __init__(self):
@@ -13,6 +14,7 @@ class TrackCam:
         self.camera.resolution = (1216, 960)
         self.scene = self.setScene()
         self.vertex = self.setVertex()
+        self.drawEdge()
         self.x_start, self.y_start, self.width, self.height = self.setBound()
         self.a = self.b = self.c = self.d = 0
         self.para1 = self.para2 = False
@@ -26,7 +28,7 @@ class TrackCam:
 
         return output
 
-    def getPoint(self, im):
+    def getPoint(self, im, save = False):
         # Get the masked image
         im = 255 - im
         im_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
@@ -43,13 +45,17 @@ class TrackCam:
         for i in range(pixelNum):
             x_ave += location[i][0][0]
             y_ave += location[i][0][1]
+
+        if(save == True):
+            imwrite('mask'+str(id), im_mask)
+            id += 1
         
         return [x_ave // pixelNum, y_ave // pixelNum]
 
     def setScene(self):
         im = self.getIm()
         cv2.imwrite('./sceneIm.jpg', im)
-        if(self.getPoint(im) == [-1, -1]):
+        if(self.getPoint(im, True) == [-1, -1]):
             print('Dirty scene!')
             return None
         
@@ -61,7 +67,7 @@ class TrackCam:
             again = True
             while(again):
                 print('Getting vertex ', i)
-                #time.sleep(5)
+                time.sleep(3)
                 im = self.getIm()
                 x, y = self.getPoint(im)
                 if(not x == -1):
@@ -89,17 +95,21 @@ class TrackCam:
             self.vertex[i][0] -= x_start
             self.vertex[i][1] -= y_start
 
+        print('Origin at (', x_start, ', ', y_start, ')')
+        print('  width = ', width)
+        print('. height = ', height)
+
         return [x_start, y_start, width, height]
 
     def setIdealPoint(self):
         I1 = I2 = [0, 0]
-        print('Are vertical bounds parallel: ')
+        print('Are vertical bounds parallel:', end = ' ')
         if((self.vertex[3][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[1][1]) == (self.vertex[2][0]-self.vertex[1][0])*(self.vertex[3][1]-self.vertex[0][1])):
             self.para1 = True
             print('Yes')
         else:
             print('No')
-        print('Are horizontal bounds parallel: ')
+        print('Are horizontal bounds parallel:', end = ' ')
         if((self.vertex[1][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[3][1]) == (self.vertex[2][0]-self.vertex[3][0])*(self.vertex[1][1]-self.vertex[0][1])):
             self.para1 = True
             print('Yes')
