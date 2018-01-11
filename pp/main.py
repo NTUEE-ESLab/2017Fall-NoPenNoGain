@@ -6,10 +6,10 @@ from picamera.array import PiRGBArray
 
 m = 0.00000001
 M = 100000000
-id = 0
 
 class TrackCam:
     def __init__(self):
+        self.idx = 0
         self.camera = PiCamera()
         self.camera.resolution = (1216, 960)
         self.scene = self.setScene()
@@ -36,6 +36,13 @@ class TrackCam:
         lowRed = np.array([70,90,50])
         uppRed = np.array([100,255,255])
         im_mask = cv2.inRange(im_hsv, lowRed, uppRed)
+
+
+        if(save == True):
+            cv2.imwrite('./mask'+str(self.idx)+'.jpg', im_mask)
+            self.idx += 1
+
+
         # Get the non-zero part
         location = cv2.findNonZero(im_mask)
         if(location is None):
@@ -46,16 +53,13 @@ class TrackCam:
             x_ave += location[i][0][0]
             y_ave += location[i][0][1]
 
-        if(save == True):
-            imwrite('mask'+str(id), im_mask)
-            id += 1
         
         return [x_ave // pixelNum, y_ave // pixelNum]
 
     def setScene(self):
         im = self.getIm()
         cv2.imwrite('./sceneIm.jpg', im)
-        if(self.getPoint(im, True) == [-1, -1]):
+        if(not self.getPoint(im, True) == [-1, -1]):
             print('Dirty scene!')
             return None
         
@@ -98,6 +102,13 @@ class TrackCam:
         print('Origin at (', x_start, ', ', y_start, ')')
         print('  width = ', width)
         print('. height = ', height)
+
+        boundIm = self.scene
+        cv2.line(boundIm, (x_start, y_start), (x_start+width, y_start), (0, 255, 0), 2)
+        cv2.line(boundIm, (x_start+width, y_start), (x_start+width, y_start+height), (0, 255, 0), 2)
+        cv2.line(boundIm, (x_start+width, y_start+height), (x_start, y_start+height), (0, 255, 0), 2)
+        cv2.line(boundIm, (x_start, y_start+height), (x_start, y_start), (0, 255, 0), 2)
+        cv2.imwrite('./boundIm.jpg', boundIm)
 
         return [x_start, y_start, width, height]
 
@@ -170,7 +181,9 @@ class TrackCam:
     def track(self):
         while(True):
             im = self.getIm()
-            im = im[self.x_start : (self.x_start + self.width), self.y_start : (self.y_start + self.height)]
+            cv2.imwrite('iim.jpg', im)
+            im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
+            cv2.imwrite('iiim.jpg', im)
             x_ave, y_ave = self.getPoint(im)
             x_trans, y_trans = self.transformation(x_ave, y_ave)
 
