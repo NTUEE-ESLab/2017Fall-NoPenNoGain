@@ -127,11 +127,11 @@ class TrackCam:
             print('No')
         print('Are horizontal bounds parallel:', end = ' ')
         if((self.vertex[1][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[3][1]) == (self.vertex[2][0]-self.vertex[3][0])*(self.vertex[1][1]-self.vertex[0][1])):
-            self.para1 = True
+            self.para2 = True
             print('Yes')
         else:
             print('No')
-        if(self.para1 == False):
+        if(not self.para1):
             self.a = (self.vertex[1][1]-self.vertex[0][1]) / np.clip((self.vertex[1][0]-self.vertex[0][0]), m, M) 
             self.b = - self.a * self.vertex[0][0] + self.vertex[0][1]
             e = (self.vertex[2][1]-self.vertex[3][1]) / np.clip((self.vertex[2][0]-self.vertex[3][0]), m, M)
@@ -143,7 +143,7 @@ class TrackCam:
             print('Ideal point 1 at (', I1[0], ', ', I1[1], ')')
         else:
             print('No ideal point 1')
-        if(self.para2 == False):
+        if(not self.para2):
             self.c = (self.vertex[3][1]-self.vertex[0][1]) / np.clip((self.vertex[3][0]-self.vertex[0][0]), m, M)
             self.d = - self.c * self.vertex[3][0] + self.vertex[3][1]
             g = (self.vertex[2][1]-self.vertex[1][1]) / np.clip((self.vertex[2][0]-self.vertex[1][0]), m, M)
@@ -152,22 +152,22 @@ class TrackCam:
             I2[0] = - (self.d - h) / (self.c - g)
             I2[1] = I2[0] * self.c + self.d
 
-            print('Ideal point 1 at (', I2[0], ', ', I2[1], ')')
+            print('Ideal point 2 at (', I2[0], ', ', I2[1], ')')
         else:
-            print('No ideal point 1')
+            print('No ideal point 2')
 
         return I1, I2
 
     def transformation(self, x_T, y_T):
         x_E = x_F = 0
-        if(self.para1 == True):
+        if(self.para1):
             r = - self.c * x_T + y_T
             x_E = - (self.b - r) / (self.a - self.c)
         else:
             g = (self.I2[1] - y_T) / (self.I2[0] - x_T)
             h = - g * x_T + y_T
             x_E = - (self.b - h) / (self.a - g)
-        if(self.para2 == True):
+        if(self.para2):
             r = - self.a * x_T + y_T
             x_F = - (self.d - r) / (self.c - self.a)
         else:

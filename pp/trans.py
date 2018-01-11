@@ -14,7 +14,7 @@ class TrackCam:
         #self.camera.resolution = (1216, 960)
         #self.scene = self.setScene()
         #self.vertex = self.setVertex()
-        self.vertex = [[100, 100], [200, 100], [200, 200], [100, 200]]
+        self.vertex = [[100, 100], [200, 99], [201, 200], [101, 199]]
         #self.drawEdge()
         self.x_start, self.y_start, self.width, self.height = self.setBound()
         self.a = self.b = self.c = self.d = 0
@@ -161,8 +161,6 @@ class TrackCam:
 
     def transformation(self, x_T, y_T):
         x_E = x_F = 0
-        if(self.para1 and self.para2):
-
         if(self.para1):
             r = - self.c * x_T + y_T
             x_E = - (self.b - r) / (self.a - self.c)
