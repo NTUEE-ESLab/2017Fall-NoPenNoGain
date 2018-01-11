@@ -42,6 +42,8 @@ class TrackCam:
             return[-1, -1]
             # If red part is detected
         x_ave = y_ave = 0
+        print(location[0])
+        input
         for i in range(pixelNum):
             x_ave += location[i][0]
             y_ave += location[i][1]
