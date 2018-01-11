@@ -103,6 +103,13 @@ class TrackCam:
         print('  width = ', width)
         print('. height = ', height)
 
+        boundIm = self.scene
+        cv2.line(boundIm, (x_start, y_start), (x_start+width, y_start), (0, 255, 0), 2)
+        cv2.line(boundIm, (x_start+width, y_start), (x_start+width, y_start+height), (0, 255, 0), 2)
+        cv2.line(boundIm, (x_start+width, y_start+height), (x_start, y_start+height), (0, 255, 0), 2)
+        cv2.line(boundIm, (x_start, y_start+height), (x_start, y_start), (0, 255, 0), 2)
+        cv2.imwrite('./boundIm.jpg', boundIm)
+
         return [x_start, y_start, width, height]
 
     def setIdealPoint(self):
