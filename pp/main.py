@@ -174,7 +174,7 @@ class TrackCam:
     def track(self):
         while(True):
             im = self.getIm()
-            im = im[self.x_start : (self.x_start + self.width), self.y_start : (self.y_start + self.height)]
+            im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
             cv2.imwrite('iiim.jpg', im)
             x_ave, y_ave = self.getPoint(im)
             x_trans, y_trans = self.transformation(x_ave, y_ave)
