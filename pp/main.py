@@ -6,20 +6,23 @@ from picamera.array import PiRGBArray
 
 class TrackCam:
     def __init__(self):
+        self.cap = cv2.VideoCapture(0)
         self.camera = PiCamera()
-        self.camera.resolution = (1200, 960)
-        self.rawCapture = PiRGBArray(self.camera, size = (1216,960))
+        self.camera.resolution = (1184, 960)
+        self.camera.framerate = 24
         self.scene = self.setScene()
         self.vertex = self.setVertex()
         self.x_start, self.y_start, self.width, self.height = self.setBound()
         self.a = self.b = self.c = self.d = 0
+        self.para1 = self.para2 = False
         self.I1, self.I2 = self.setIdealPoint()
 
     def getIm(self):
-        self.camera.capture(self.rawCapture, format="bgr")
-        im = self.rawCapture.array
+        output = np.empty((1184*960*3), dtype = np.uint8)
+        self.camera.capture(output, 'rgb')
+        output = output.reshape(1184, 960, 3)
 
-        return im
+        return output
 
     def getPoint(self, im):
         # Get the masked image
@@ -36,27 +39,22 @@ class TrackCam:
         im_mask = im_mask0 + im_mask1
         # Get the non-zero part
         location = cv2.findNonZero(im_mask)
-        pixelNum = len(location)
-        # If no red part is detected
-        if(pixelNum == 0):
+        if(location == None):
             return[-1, -1]
-            # If red part is detected
+        pixelNum = len(location)
         x_ave = y_ave = 0
-        print(location[0])
-        input
         for i in range(pixelNum):
-            x_ave += location[i][0]
-            y_ave += location[i][1]
+            x_ave += location[i][0][0]
+            y_ave += location[i][0][1]
         
         return [x_ave // pixelNum, y_ave // pixelNum]
 
     def setScene(self):
         im = self.getIm()
-        cv2.imwrite('./SceneIm.jpg', im)
-        if(not self.getPoint(im) == [-1, -1]):
+        cv2.imwrite('./sceneIm.jpg', im)
+        if(self.getPoint(im) == [-1, -1]):
             print('Dirty scene!')
             return None
-        cv2.imwrite('./sceneIm.jpg', im)
         
         return im
 
@@ -66,7 +64,7 @@ class TrackCam:
             again = True
             while(again):
                 print('Getting vertex ', i)
-                time.sleep(5)
+                #time.sleep(5)
                 im = self.getIm()
                 x, y = self.getPoint(im)
                 if(not x == -1):
@@ -97,22 +95,22 @@ class TrackCam:
         return [x_start, y_start, width, height]
 
     def setIdealPoint(self):
+        m = 0.000000001
         I1 = I2 = [0, 0]
-        para1 = para2 = False
         print('Are vertical bounds parallel: ')
         if((self.vertex[3][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[1][1]) == (self.vertex[2][0]-self.vertex[1][0])*(self.vertex[3][1]-self.vertex[0][1])):
-            para1 = True
+            self.para1 = True
             print('Yes')
         else:
             print('No')
         print('Are horizontal bounds parallel: ')
         if((self.vertex[1][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[3][1]) == (self.vertex[2][0]-self.vertex[3][0])*(self.vertex[1][1]-self.vertex[0][1])):
-            para1 = True
+            self.para1 = True
             print('Yes')
         else:
             print('No')
-        if(para1 == False):
-            self.a = (self.vertex[1][1]-self.vertex[0][1]) / (self.vertex[1][0]-self.vertex[0][0])
+        if(self.para1 == False):
+            self.a = clip((self.vertex[1][1]-self.vertex[0][1]) / (self.vertex[1][0]-self.vertex[0][0]), m, M) 
             self.b = - self.a * self.vertex[0][0] + self.vertex[0][1]
             e = (self.vertex[2][1]-self.vertex[3][1]) / (self.vertex[2][0]-self.vertex[3][0])
             f = - e * self.vertex[3][0] + self.vertex[3][1]
@@ -123,7 +121,7 @@ class TrackCam:
             print('Ideal point 1 at (', I1[0], ', ', I1[1], ')')
         else:
             print('No ideal point 1')
-        if(para2 == False):
+        if(self.para2 == False):
             self.c = (self.vertex[3][1]-self.vertex[0][1]) / (self.vertex[3][0]-self.vertex[0][0])
             self.d = - self.c * self.vertex[3][0] + self.vertex[3][1]
             g = (self.vertex[2][1]-self.vertex[1][1]) / (self.vertex[2][0]-self.vertex[1][0])
@@ -140,18 +138,18 @@ class TrackCam:
 
     def transformation(self, x_T, y_T):
         x_E = x_F = 0
-        if(para1 == True):
+        if(self.para1 == True):
             r = - self.c * x_T + y_T
             x_E = - (self.b - r) / (self.a - self.c)
         else:
             g = (self.I2[1] - y_T) / (self.I2[0] - x_T)
             h = - g * x_T + y_T
             x_E = - (self.b - h) / (self.a - g)
-        if(para2 == True):
+        if(self.para2 == True):
             r = - self.a * x_T + y_T
             x_F = - (self.d - r) / (self.c - self.a)
         else:
-            e = (I1[1] - y_T) / (I1[0] - x_T)
+            e = (self.I1[1] - y_T) / (self.I1[0] - x_T)
             f = - e * x_T + y_T
             x_F = - (self.d - f) / (self.c - e)
 
@@ -165,8 +163,8 @@ class TrackCam:
 
     def track(self):
         while(True):
-            im = getIm()
-            im = im[x_start : (x_start + width), y_start : (y_start + height)]
+            im = self.getIm()
+            im = im[self.x_start : (self.x_start + self.width), self.y_start : (self.y_start + self.height)]
             x_ave, y_ave = self.getPoint(im)
             x_trans, y_trans = self.transformation(x_ave, y_ave)
 

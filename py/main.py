@@ -38,8 +38,8 @@ class myStream:
 def main():
     print('Connecting...')
 
-    #dev = btle.Peripheral("F4:8C:50:AD:0D:A8")
-    dev = btle.Peripheral("B8:27:EB:C3:E4:99")
+    dev = btle.Peripheral("F4:8C:50:AD:0D:A8")
+    #dev = btle.Peripheral("B8:27:EB:C3:E4:99")
     echo = dev.getCharacteristics()[-1]
 
     print('Connecting successfully!')
