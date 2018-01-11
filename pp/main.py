@@ -6,7 +6,6 @@ from picamera.array import PiRGBArray
 
 m = 0.00000001
 M = 100000000
-idx = 0
 
 class TrackCam:
     def __init__(self):
@@ -19,6 +18,7 @@ class TrackCam:
         self.a = self.b = self.c = self.d = 0
         self.para1 = self.para2 = False
         self.I1, self.I2 = self.setIdealPoint()
+        self.idx = 0
 
     def getIm(self):
         output = np.empty((960*1216*3), dtype = np.uint8)
@@ -36,6 +36,13 @@ class TrackCam:
         lowRed = np.array([70,90,50])
         uppRed = np.array([100,255,255])
         im_mask = cv2.inRange(im_hsv, lowRed, uppRed)
+
+
+        if(save == True):
+            cv2.imwrite('./mask'+str(self.idx)+'.jpg', im_mask)
+            self.idx += 1
+
+        
         # Get the non-zero part
         location = cv2.findNonZero(im_mask)
         if(location is None):
@@ -46,9 +53,6 @@ class TrackCam:
             x_ave += location[i][0][0]
             y_ave += location[i][0][1]
 
-        if(save == True):
-            cv2.imwrite('./mask'+str(idx)+'.jpg', im_mask)
-            idx += 1
         
         return [x_ave // pixelNum, y_ave // pixelNum]
 
