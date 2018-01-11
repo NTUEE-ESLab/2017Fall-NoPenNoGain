@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     while(1){
         std::unique_lock<std::mutex> lk(m);
         cv.wait(lk, []{return click && erase;});
+        lk.unlock();
         // erase here
     }
 
