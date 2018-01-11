@@ -42,7 +42,7 @@ class TrackCam:
             cv2.imwrite('./mask'+str(self.idx)+'.jpg', im_mask)
             self.idx += 1
 
-        
+
         # Get the non-zero part
         location = cv2.findNonZero(im_mask)
         if(location is None):
@@ -175,7 +175,8 @@ class TrackCam:
         while(True):
             im = self.getIm()
             im = im[self.x_start : (self.x_start + self.width), self.y_start : (self.y_start + self.height)]
-            x_ave, y_ave = self.getPoint(im, True)
+            cv2.imwrite('iiim.jpg', im)
+            x_ave, y_ave = self.getPoint(im)
             x_trans, y_trans = self.transformation(x_ave, y_ave)
 
             if(x_ave == -1):
