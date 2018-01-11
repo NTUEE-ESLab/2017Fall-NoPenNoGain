@@ -131,53 +131,87 @@ class TrackCam:
             print('Yes')
         else:
             print('No')
-        if(not self.para1):
-            self.a = (self.vertex[1][1]-self.vertex[0][1]) / np.clip((self.vertex[1][0]-self.vertex[0][0]), m, M) 
-            self.b = - self.a * self.vertex[0][0] + self.vertex[0][1]
-            e = (self.vertex[2][1]-self.vertex[3][1]) / np.clip((self.vertex[2][0]-self.vertex[3][0]), m, M)
-            f = - e * self.vertex[3][0] + self.vertex[3][1]
 
-            I1[0] = - (self.b - f) / (self.a - e)
-            I1[1] = I1[0] * self.a + self.b
+        if(not self.para1):
+            if(self.vertex[0][0] == self.vertex[3][0]):
+                I1[0] = self.vertex[0][0]
+                I1[1] = self.vertex[1][1] + (self.vertex[0][0]-self.vertex[1][0])*(self.vertex[1][1]-self.vertex[2][1])/(self.vertex[1][0]-self.vertex[2][0])
+            elif(self.vertex[1][0] == self.vertex[2][0]):
+                I1[0] = self.vertex[1][0]
+                I1[1] = self.vertex[0][1] + (self.vertex[1][0]-self.vertex[0][0])*(self.vertex[0][1]-self.vertex[3][1])/(self.vertex[0][0]-self.vertex[3][0])
+            else:
+                self.c = (self.vertex[3][1]-self.vertex[0][1]) / (self.vertex[3][0]-self.vertex[0][0])
+                self.d = - self.c * self.vertex[3][0] + self.vertex[3][1]
+                g = (self.vertex[2][1]-self.vertex[1][1]) / (self.vertex[2][0]-self.vertex[1][0])
+                h = - g * self.vertex[2][0] + self.vertex[2][1]
+
+                I1[0] = - (self.d - h) / (self.c - g)
+                I1[1] = I1[0] * self.c + self.d
 
             print('Ideal point 1 at (', I1[0], ', ', I1[1], ')')
         else:
-            print('No ideal point 1')
+            print('Ideal point 1 at inf')
         if(not self.para2):
-            self.c = (self.vertex[3][1]-self.vertex[0][1]) / np.clip((self.vertex[3][0]-self.vertex[0][0]), m, M)
-            self.d = - self.c * self.vertex[3][0] + self.vertex[3][1]
-            g = (self.vertex[2][1]-self.vertex[1][1]) / np.clip((self.vertex[2][0]-self.vertex[1][0]), m, M)
-            h = - g * self.vertex[2][0] + self.vertex[2][1]
+            if(self.vertex[0][1] == self.vertex[1][1]):
+                I2[0] = self.vertex[2][0] + (self.vertex[1][1]-self.vertex[2][1])*(self.vertex[2][0]-self.vertex[3][0])/(self.vertex[2][1]-self.vertex[3][1])
+                I2[1] = self.vertex[0][1]
+            elif(self.vertex[2][1] == self.vertex[3][1]):
+                I2[0] = self.vertex[1][0] + (self.vertex[2][1]-self.vertex[1][1])*(self.vertex[1][0]-self.vertex[0][0])/(self.vertex[1][1]-self.vertex[0][1])
+                I2[1] = self.vertex[2][1]
+            else:
+                self.a = (self.vertex[1][1]-self.vertex[0][1]) / (self.vertex[1][0]-self.vertex[0][0])
+                self.b = - self.a * self.vertex[0][0] + self.vertex[0][1]
+                e = (self.vertex[2][1]-self.vertex[3][1]) / (self.vertex[2][0]-self.vertex[3][0])
+                f = - e * self.vertex[3][0] + self.vertex[3][1]
 
-            I2[0] = - (self.d - h) / (self.c - g)
-            I2[1] = I2[0] * self.c + self.d
+                I2[0] = - (self.b - f) / (self.a - e)
+                I2[1] = I2[0] * self.a + self.b
 
             print('Ideal point 2 at (', I2[0], ', ', I2[1], ')')
         else:
-            print('No ideal point 2')
+            print('Ideal point 2 at inf')
 
         return I1, I2
-
+ 
     def transformation(self, x_T, y_T):
-        x_E = x_F = 0
-        if(self.para1):
-            r = - self.c * x_T + y_T
-            x_E = - (self.b - r) / (self.a - self.c)
+        x_E = 0
+        y_F = 0
+        if(self.I1[0] == x_T):
+            x_E = x_T
+        elif(self.para1):
+            if(self.vertex[0][0] == self.vertex[3][0]):
+                x_E = x_T
+            else:
+                r = - self.c * x_T + y_T
+                x_E = - (self.b - r) / (self.a - self.c)
         else:
-            g = (self.I2[1] - y_T) / (self.I2[0] - x_T)
+            g = (self.I1[1] - y_T) / (self.I1[0] - x_T)
             h = - g * x_T + y_T
             x_E = - (self.b - h) / (self.a - g)
         if(self.para2):
             r = - self.a * x_T + y_T
-            x_F = - (self.d - r) / (self.c - self.a)
+            if(self.vertex[0][0] == self.vertex[3][0]):
+                y_F = r
+            else:
+                x_F = - (self.d - r) / (self.c - self.a)
+                y_f = c * x_F + d
         else:
-            e = (self.I1[1] - y_T) / (self.I1[0] - x_T)
+            e = (self.I2[1] - y_T) / (self.I2[0] - x_T)
             f = - e * x_T + y_T
-            x_F = - (self.d - f) / (self.c - e)
+            if(self.vertex[0][0] == self.vertex[3][0]):
+                y_F = f
+            else:
+                x_F = - (self.d - f) / (self.c - e)
+                y_F = self.c * x_F + self.d
 
-        k = ((self.I1[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / ((self.vertex[1][0]-self.vertex[0][0]) * (self.I1[0] - x_E))
-        l = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[3][0]-x_F)) / ((self.vertex[3][0]-self.vertex[0][0]) * (self.I2[0] - x_F))
+        print('x_E = ', x_E)
+        print('y_F = ', y_F)
+
+        k = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / ((self.vertex[1][0]-self.vertex[0][0]) * (self.I2[0] - x_E))
+        l = ((self.I1[1]-self.vertex[0][1]) * (self.vertex[3][1]-y_F)) / ((self.vertex[3][1]-self.vertex[0][1]) * (self.I1[1] - y_F))
         
+        if((k < 0) or (k > 1) or (l < 0) or (l > 1)):
+            return [-1, -1]
         return [(1 - k), (1 - l)]
 
     def track(self):
@@ -186,12 +220,15 @@ class TrackCam:
             im = self.getIm()
             im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
             x_ave, y_ave = self.getPoint(im, True)
-            x_ratio, y_ratio = self.transformation(x_ave, y_ave)
-
+            
             if(x_ave == -1):
                 print('(---, ---) | (---, ---)')
             else:
-                print('(', x_ave, ', ', y_ave, ') | (', x_ratio, ', ', y_ratio, ')')
+                x_ratio, y_ratio = self.transformation(x_ave, y_ave)
+                if(x_ratio == -1):
+                    print('(---, ---) | (---, ---)')
+                else:
+                    print('(', x_ave, ', ', y_ave, ') | (', x_ratio, ', ', y_ratio, ')')
 
 
 
