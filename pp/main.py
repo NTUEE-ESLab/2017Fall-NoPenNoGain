@@ -171,7 +171,7 @@ class TrackCam:
         else:
             print('Ideal point 2 at inf')
 
-        return I1, I2
+        return [I1, I2]
  
     def transformation(self, x_T, y_T):
         x_E = 0
@@ -224,11 +224,12 @@ class TrackCam:
             if(x_ave == -1):
                 print('(---, ---) | (---, ---)')
             else:
+                print('(', x_ave, ', ', y_ave, ')')
                 x_ratio, y_ratio = self.transformation(x_ave, y_ave)
                 if(x_ratio == -1):
                     print('(---, ---) | (---, ---)')
                 else:
-                    print('(', x_ave, ', ', y_ave, ') | (', x_ratio, ', ', y_ratio, ')')
+                    print('(', x_ratio, ', ', y_ratio, ')')
 
 
 

@@ -14,7 +14,7 @@ class TrackCam:
         #self.camera.resolution = (1216, 960)
         #self.scene = self.setScene()
         #self.vertex = self.setVertex()
-        self.vertex = [[100, 100], [200, 99], [201, 200], [100, 199]]
+        self.vertex = [[0, 0], [536, 22], [531, 489], [25, 547]]
         #self.drawEdge()
         self.x_start, self.y_start, self.width, self.height = self.setBound()
         self.a = self.b = self.c = self.d = 0
@@ -151,7 +151,7 @@ class TrackCam:
             print('(', x_ratio, ', ', y_ratio, ')')
 
 d = ([
-    [100, 100], 
+    [180, 190], 
     [200, 100], 
     [200, 200], 
     [100, 200], 
