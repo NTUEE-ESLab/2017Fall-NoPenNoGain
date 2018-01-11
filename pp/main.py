@@ -39,7 +39,7 @@ class TrackCam:
         im_mask = im_mask0 + im_mask1
         # Get the non-zero part
         location = cv2.findNonZero(im_mask)
-        if(not location):
+        if(location is None):
             return[-1, -1]
         pixelNum = len(location)
         x_ave = y_ave = 0
