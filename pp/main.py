@@ -9,9 +9,8 @@ M = 100000000
 
 class TrackCam:
     def __init__(self):
-        self.cap = cv2.VideoCapture(0)
         self.camera = PiCamera()
-        self.camera.resolution = (1200, 960)
+        self.camera.resolution = (1216, 960)
         self.scene = self.setScene()
         self.vertex = self.setVertex()
         self.x_start, self.y_start, self.width, self.height = self.setBound()
@@ -20,10 +19,10 @@ class TrackCam:
         self.I1, self.I2 = self.setIdealPoint()
 
     def getIm(self):
-        output = np.empty((1216*960*3), dtype = np.uint8)
-        self.camera.capture(output, 'rgb')
-        output = output.reshape(1216, 960, 3)
-        output = output[:1200, :960, ]
+        output = np.empty((960*1216*3), dtype = np.uint8)
+        self.camera.capture(output, 'bgr')
+        output = output.reshape((960, 1216, 3))
+        output = output[:960, :1200, ]
 
         return output
 
