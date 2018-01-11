@@ -19,7 +19,7 @@ x = y = 0
 im_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
 
 
-lowRed = np.array([80,80,60])
+lowRed = np.array([70,90,50])
 uppRed = np.array([100,255,255])
 im_mask = cv2.inRange(im_hsv, lowRed, uppRed)
 '''
