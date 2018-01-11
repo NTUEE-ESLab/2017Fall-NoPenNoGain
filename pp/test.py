@@ -5,9 +5,12 @@ from picamera import PiCamera
 from picamera.array import PiRGBArray 
 
 class Test:
+    def __init__(self):
+        self.camera = PiCamera()
+        self.camera.resolution = (1216, 960)
     def getIm(self):
         output = np.empty((1216*960*3), dtype = np.uint8)
-        self.camera.capture(output, 'rgb')
+        self.camera.capture(output, 'bgr')
         output = output.reshape(1216, 960, 3)
         output = output[:1200, :960, ]
 
@@ -40,8 +43,8 @@ class Test:
 
 
 t = Test()
-while(true):
-    im = t.getIm
-    x, y = getPoint(im)
-    print('(', x, ', ', y, ')', end = '')
+while(True):
+    im = t.getIm()
+    x, y = t.getPoint(im)
+    print('(', x, ', ', y, ')')
     input
