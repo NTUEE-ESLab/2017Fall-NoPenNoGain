@@ -47,7 +47,7 @@ class TrackCam:
             y_ave += location[i][0][1]
 
         if(save == True):
-            imwrite('mask'+str(id), im_mask)
+            imwrite('./mask'+str(id), im_mask)
             id += 1
         
         return [x_ave // pixelNum, y_ave // pixelNum]
@@ -171,7 +171,7 @@ class TrackCam:
         while(True):
             im = self.getIm()
             im = im[self.x_start : (self.x_start + self.width), self.y_start : (self.y_start + self.height)]
-            x_ave, y_ave = self.getPoint(im)
+            x_ave, y_ave = self.getPoint(im, True)
             x_trans, y_trans = self.transformation(x_ave, y_ave)
 
             if(x_ave == -1):
