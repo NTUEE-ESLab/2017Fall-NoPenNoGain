@@ -1,7 +1,12 @@
-import cv2
 import sys
+import numpy as np
+import time
+import cv2
+from picamera import PiCamera
+from picamera.array import PiRGBArray
+
  
-(major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')￼
+#(major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')￼
  
 if __name__ == '__main__' :
  
