@@ -215,7 +215,6 @@ class TrackCam:
         return [(1 - k), (1 - l)]
 
     def track(self):
-        while(True):
             input()
             im = self.getIm()
             im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
