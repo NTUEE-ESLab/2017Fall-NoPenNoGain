@@ -4,9 +4,6 @@ import cv2
 from picamera import PiCamera
 from picamera.array import PiRGBArray
 
-m = 0.00000001
-M = 100000000
-
 class TrackCam:
     def __init__(self):
         self.idx = 0
@@ -37,11 +34,12 @@ class TrackCam:
         uppRed = np.array([90,255,255])
         im_mask = cv2.inRange(im_hsv, lowRed, uppRed)
 
-
+        '''
         if(save == True):
             cv2.imwrite('./record/im'+str(self.idx)+'.jpg', im)
             cv2.imwrite('./record/mask'+str(self.idx)+'.jpg', im_mask)
             self.idx += 1
+        '''
 
 
         # Get the non-zero part
@@ -59,11 +57,10 @@ class TrackCam:
 
     def setScene(self):
         im = self.getIm()
-        cv2.imwrite('./sceneIm.jpg', im)
+        #cv2.imwrite('./sceneIm.jpg', im)
         if(not self.getPoint(im, True) == [-1, -1]):
             print('Dirty scene!')
-            return None
-        
+
         return im
 
     def setVertex(self):
@@ -86,7 +83,7 @@ class TrackCam:
         edgeIm = self.scene
         for i in range(4):
             cv2.line(edgeIm, (self.vertex[i%4][0], self.vertex[i%4][1]), (self.vertex[(i+1)%4][0], self.vertex[(i+1)%4][1]), (0, 255, 0), 2)
-        cv2.imwrite('./edgeIm.jpg', edgeIm)
+        #cv2.imwrite('./edgeIm.jpg', edgeIm)
 
         return None
 
@@ -113,7 +110,7 @@ class TrackCam:
         cv2.line(boundIm, (x_start+width, y_start), (x_start+width, y_start+height), (0, 255, 0), 2)
         cv2.line(boundIm, (x_start+width, y_start+height), (x_start, y_start+height), (0, 255, 0), 2)
         cv2.line(boundIm, (x_start, y_start+height), (x_start, y_start), (0, 255, 0), 2)
-        cv2.imwrite('./boundIm.jpg', boundIm)
+        #cv2.imwrite('./boundIm.jpg', boundIm)
 
         return [x_start, y_start, width, height]
     
@@ -198,8 +195,8 @@ class TrackCam:
                 x_F = - (self.d - f) / (self.c - e)
                 y_F = self.c * x_F + self.d
 
-        print('x_E = ', x_E)
-        print('y_F = ', y_F)
+        #print('x_E = ', x_E)
+        #print('y_F = ', y_F)
 
         k = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / ((self.vertex[1][0]-self.vertex[0][0]) * (self.I2[0] - x_E))
         l = ((self.I1[1]-self.vertex[0][1]) * (self.vertex[3][1]-y_F)) / ((self.vertex[3][1]-self.vertex[0][1]) * (self.I1[1] - y_F))
@@ -210,7 +207,6 @@ class TrackCam:
 
     def track(self):
         while(True):
-            input()
             im = self.getIm()
             im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
             x_ave, y_ave = self.getPoint(im, True)
