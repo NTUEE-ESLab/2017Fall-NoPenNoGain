@@ -4,11 +4,11 @@ import cv2
 from picamera import PiCamera
 from picamera.array import PiRGBArray 
 
-self.camera = PiCamera()
-self.camera.resolution = (1216, 960)
+camera = PiCamera()
+camera.resolution = (1216, 960)
 
 output = np.empty((1216*960*3), dtype = np.uint8)
-self.camera.capture(output, 'bgr')
+camera.capture(output, 'bgr')
 output = output.reshape(1216, 960, 3)
 output = output[:1200, :960, ]
 
