@@ -6,7 +6,7 @@ from picamera.array import PiRGBArray
 
 m = 0.00000001
 M = 100000000
-id = 0
+idx = 0
 
 class TrackCam:
     def __init__(self):
@@ -47,7 +47,7 @@ class TrackCam:
             y_ave += location[i][0][1]
 
         if(save == True):
-            cv2.imwrite('./mask'+str(id)+'.jpg', im_mask)
+            cv2.imwrite('./mask'+str(idx)+'.jpg', im_mask)
             id += 1
         
         return [x_ave // pixelNum, y_ave // pixelNum]
