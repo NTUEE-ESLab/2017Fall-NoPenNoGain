@@ -35,7 +35,7 @@ class TrackCam:
         # join the masks
         im_mask = im_mask0 + im_mask1
         # Get the non-zero part
-        location = cvs.findNonZero(im_mask)
+        location = cv2.findNonZero(im_mask)
         pixelNum = len(location)
         # If no red part is detected
         if(pixelNum == 0):
