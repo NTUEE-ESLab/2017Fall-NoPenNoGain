@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/image">
+        <file alias="previouspage">images/previouspage.png</file>
+        <file alias="nextpage">images/nextpage.png</file>
+        <file alias="eraser">images/eraser.png</file>
+        <file alias="pen">images/pen.png</file>
+        <file alias="exit">images/exit.png</file>
+        <file alias="minimize">images/minimize.png</file>
+        <file alias="move">images/move.png</file>
+    </qresource>
+</RCC>
