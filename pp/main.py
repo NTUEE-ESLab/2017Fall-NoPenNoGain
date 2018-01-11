@@ -95,16 +95,16 @@ class TrackCam:
         return [x_start, y_start, width, height]
 
     def setIdealPoint(self):
-    	I1 = I2 = [0, 0]
-    	para1 = para2 = False
-    	print('Are vertical bounds parallel: ')
-    	if((self.vertex[3][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[1][1]) == (self.vertex[2][0]-self.vertex[1][0])*(self.vertex[3][1]-self.vertex[0][1])):
+        I1 = I2 = [0, 0]
+        para1 = para2 = False
+        print('Are vertical bounds parallel: ')
+        if((self.vertex[3][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[1][1]) == (self.vertex[2][0]-self.vertex[1][0])*(self.vertex[3][1]-self.vertex[0][1])):
             para1 = True
             print('Yes')
         else:
             print('No')
         print('Are horizontal bounds parallel: ')
-    	if((self.vertex[1][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[3][1]) == (self.vertex[2][0]-self.vertex[3][0])*(self.vertex[1][1]-self.vertex[0][1])):
+        if((self.vertex[1][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[3][1]) == (self.vertex[2][0]-self.vertex[3][0])*(self.vertex[1][1]-self.vertex[0][1])):
             para1 = True
             print('Yes')
         else:
@@ -163,8 +163,8 @@ class TrackCam:
 
     def track(self):
         while(True):
-        	im = getIm()
-        	im = im[x_start : (x_start + width), y_start : (y_start + height)]
+            im = getIm()
+            im = im[x_start : (x_start + width), y_start : (y_start + height)]
             x_ave, y_ave = self.getPoint(im)
             x_trans, y_trans = self.transformation(x_ave, y_ave)
 
