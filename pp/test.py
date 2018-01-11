@@ -12,11 +12,17 @@ camera.capture(output, 'bgr')
 output = output.reshape(960,1216, 3)
 output = output[:, :1200, ]
 
-im = output
+im = 255 - output
 x = y = 0
 
 # Get the masked image
 im_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
+
+
+lowRed = np.array([80,80,60])
+uppRed = np.array([100,255,255])
+im_mask = cv2.inRange(im_hsv, lowRed, uppRed)
+'''
 # lower mask
 lowRed = np.array([0,100,100])
 uppRed = np.array([10,255,255])
@@ -27,6 +33,7 @@ uppRed = np.array([180,255,255])
 im_mask1 = cv2.inRange(im_hsv, lowRed, uppRed)
 # join the masks
 im_mask = im_mask0 + im_mask1
+'''
 # Get the non-zero part
 location = cv2.findNonZero(im_mask)
 if(location is None):
