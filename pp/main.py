@@ -33,8 +33,8 @@ class TrackCam:
         im = 255 - im
         im_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
         # lower mask
-        lowRed = np.array([70,90,50])
-        uppRed = np.array([110,255,255])
+        lowRed = np.array([60,70,40])
+        uppRed = np.array([90,255,255])
         im_mask = cv2.inRange(im_hsv, lowRed, uppRed)
 
 
