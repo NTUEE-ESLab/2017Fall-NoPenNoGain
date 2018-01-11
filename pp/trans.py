@@ -14,7 +14,7 @@ class TrackCam:
         #self.camera.resolution = (1216, 960)
         #self.scene = self.setScene()
         #self.vertex = self.setVertex()
-        self.vertex = [[100, 100], [200, 100], [200, 200], [100. 200]]
+        self.vertex = [[100, 100], [200, 100], [200, 200], [100, 200]]
         #self.drawEdge()
         self.x_start, self.y_start, self.width, self.height = self.setBound()
         self.a = self.b = self.c = self.d = 0
@@ -128,7 +128,7 @@ class TrackCam:
             print('No')
         print('Are horizontal bounds parallel:', end = ' ')
         if((self.vertex[1][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[3][1]) == (self.vertex[2][0]-self.vertex[3][0])*(self.vertex[1][1]-self.vertex[0][1])):
-            self.para1 = True
+            self.para2 = True
             print('Yes')
         else:
             print('No')
@@ -153,15 +153,17 @@ class TrackCam:
             I2[0] = - (self.d - h) / (self.c - g)
             I2[1] = I2[0] * self.c + self.d
 
-            print('Ideal point 1 at (', I2[0], ', ', I2[1], ')')
+            print('Ideal point 2 at (', I2[0], ', ', I2[1], ')')
         else:
-            print('No ideal point 1')
+            print('No ideal point 2')
 
         return I1, I2
 
     def transformation(self, x_T, y_T):
         x_E = x_F = 0
-        if(self.para1 == True):
+        if(self.para1 and self.para2):
+
+        if(self.para1):
             r = - self.c * x_T + y_T
             x_E = - (self.b - r) / (self.a - self.c)
         else:
@@ -188,10 +190,7 @@ class TrackCam:
             #x_ave, y_ave = self.getPoint(im, True)
             x_ratio, y_ratio = self.transformation(d[i][0], d[i][1])
 
-            if(x_ave == -1):
-                print('(---, ---) | (---, ---)')
-            else:
-                print('(', d[i][0], ', ', d[i][1], ') | (', x_ratio, ', ', y_ratio, ')')
+            print('(', d[i][0], ', ', d[i][1], ') | (', x_ratio, ', ', y_ratio, ')')
 
 d = ([
     [100, 100], 
