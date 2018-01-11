@@ -9,6 +9,7 @@ M = 100000000
 
 class TrackCam:
     def __init__(self):
+        self.idx = 0
         self.camera = PiCamera()
         self.camera.resolution = (1216, 960)
         self.scene = self.setScene()
@@ -18,7 +19,6 @@ class TrackCam:
         self.a = self.b = self.c = self.d = 0
         self.para1 = self.para2 = False
         self.I1, self.I2 = self.setIdealPoint()
-        self.idx = 0
 
     def getIm(self):
         output = np.empty((960*1216*3), dtype = np.uint8)
