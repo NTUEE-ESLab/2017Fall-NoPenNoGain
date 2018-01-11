@@ -27,11 +27,11 @@ class TrackCam:
         # lower mask
         lowRed = np.array([0,50,50])
         uppRed = np.array([10,255,255])
-        im_mask0 = cv2.inRange(img_hsv, lowRed, uppRed)
+        im_mask0 = cv2.inRange(im_hsv, lowRed, uppRed)
         # upper mask
         lowRed = np.array([170,50,50])
         uppRed = np.array([180,255,255])
-        im_mask1 = cv2.inRange(img_hsv, lowRed, uppRed)
+        im_mask1 = cv2.inRange(im_hsv, lowRed, uppRed)
         # join the masks
         im_mask = im_mask0 + im_mask1
         # Get the non-zero part
