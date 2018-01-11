@@ -25,9 +25,6 @@ class TrackCam:
         self.camera.capture(output, 'bgr')
         output = output.reshape((960, 1216, 3))
         output = output[:960, :1200, ]
-        self.camera.close()
-        self.camera = PiCamera()
-        self.camera.resolution = (1216, 960)
 
         return output
 
