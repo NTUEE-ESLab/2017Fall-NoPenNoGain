@@ -2,6 +2,9 @@
 #include <QDebug>
 #include <QGraphicsItem>
 #include "windows.h"
+
+
+
 paintScene::paintScene(QObject *parent) : QGraphicsScene(parent)
 {
     mycolor=Qt::red;
@@ -16,34 +19,35 @@ paintScene::~paintScene()
 
 void paintScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    std::unique_lock<std::mutex> lk(m);
-    click = true;
-    lk.unlock();
-    cv.notify_one();
-    
+
     nowPoint=event->scenePos();
     switch (mypen)
     {
-        case 0 : myaddEllipse();break;
-        case 1 : myerase();break;
+            case PEN : myaddEllipse();break;
+            case ERASER : myerase();break;
     }
 
     previousPoint = event->scenePos();
+
 }
 
 void paintScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    POINT pos;
     nowPoint=event->scenePos();
-    switch (mypen)
-    {
-        case 0 : myaddLine();break;
-        case 1 :
-            nowPoint=(event->scenePos()+previousPoint)/2;
-            myerase();break;
+
+    if(mypen==PEN){myaddLine();}
+    if(mypen==ERASER){
+        GetCursorPos(&pos);
+        nowPoint.setX(pos.x);
+        nowPoint.setY(pos.y);
+        myerase();
+
     }
 
     previousPoint = event->scenePos();
 }
+
 
 void paintScene::myaddEllipse()
 {
