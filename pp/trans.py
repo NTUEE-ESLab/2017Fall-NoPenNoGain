@@ -1,91 +1,25 @@
 import numpy as np
-import time
-import cv2
-from picamera import PiCamera
-from picamera.array import PiRGBArray
+#import time
+#import cv2
+#from picamera import PiCamera
+#from picamera.array import PiRGBArray
+
+m = 0.00000001
+M = 100000000
 
 class TrackCam:
     def __init__(self):
-        self.idx = 0
-        self.camera = PiCamera()
-        self.camera.resolution = (1216, 960)
-        self.scene = self.setScene()
-        self.vertex = self.setVertex()
-        self.drawEdge()
+        #self.idx = 0
+        #self.camera = PiCamera()
+        #self.camera.resolution = (1216, 960)
+        #self.scene = self.setScene()
+        #self.vertex = self.setVertex()
+        self.vertex = [[0, 0], [536, 22], [531, 489], [25, 547]]
+        #self.drawEdge()
         self.x_start, self.y_start, self.width, self.height = self.setBound()
         self.a = self.b = self.c = self.d = 0
         self.para1 = self.para2 = False
         self.I1, self.I2 = self.setIdealPoint()
-
-    def getIm(self):
-        output = np.empty((960*1216*3), dtype = np.uint8)
-        self.camera.capture(output, 'bgr')
-        output = output.reshape((960, 1216, 3))
-        output = output[:960, :1200, ]
-
-        return output
-
-    def getPoint(self, im, save = False):
-        # Get the masked image
-        im = 255 - im
-        im_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
-        # lower mask
-        lowRed = np.array([60,70,40])
-        uppRed = np.array([90,255,255])
-        im_mask = cv2.inRange(im_hsv, lowRed, uppRed)
-
-        '''
-        if(save == True):
-            cv2.imwrite('./record/im'+str(self.idx)+'.jpg', im)
-            cv2.imwrite('./record/mask'+str(self.idx)+'.jpg', im_mask)
-            self.idx += 1
-        '''
-
-
-        # Get the non-zero part
-        location = cv2.findNonZero(im_mask)
-        if(location is None):
-            return[-1, -1]
-        pixelNum = len(location)
-        x_ave = y_ave = 0
-        for i in range(pixelNum):
-            x_ave += location[i][0][0]
-            y_ave += location[i][0][1]
-
-        
-        return [x_ave // pixelNum, y_ave // pixelNum]
-
-    def setScene(self):
-        im = self.getIm()
-        #cv2.imwrite('./sceneIm.jpg', im)
-        if(not self.getPoint(im, True) == [-1, -1]):
-            print('Dirty scene!')
-
-        return im
-
-    def setVertex(self):
-        ver = []
-        for i in range(4):
-            again = True
-            while(again):
-                print('Getting vertex ', i)
-                time.sleep(3)
-                im = self.getIm()
-                x, y = self.getPoint(im, True)
-                if(not x == -1):
-                    ver.append([x, y])
-                    print('Get vertex ', i, 'as (', x, ', ', y, ')')
-                    again = False
-        
-        return ver
-
-    def drawEdge(self):
-        edgeIm = self.scene
-        for i in range(4):
-            cv2.line(edgeIm, (self.vertex[i%4][0], self.vertex[i%4][1]), (self.vertex[(i+1)%4][0], self.vertex[(i+1)%4][1]), (0, 255, 0), 2)
-        #cv2.imwrite('./edgeIm.jpg', edgeIm)
-
-        return None
 
     def setBound(self):
         x_start = min(self.vertex[0][0], self.vertex[3][0])
@@ -105,15 +39,15 @@ class TrackCam:
         print('  new vertex2: (', self.vertex[2][0], ', ', self.vertex[2][1], ')')
         print('  new vertex3: (', self.vertex[3][0], ', ', self.vertex[3][1], ')')
 
-        boundIm = self.scene
-        cv2.line(boundIm, (x_start, y_start), (x_start+width, y_start), (0, 255, 0), 2)
-        cv2.line(boundIm, (x_start+width, y_start), (x_start+width, y_start+height), (0, 255, 0), 2)
-        cv2.line(boundIm, (x_start+width, y_start+height), (x_start, y_start+height), (0, 255, 0), 2)
-        cv2.line(boundIm, (x_start, y_start+height), (x_start, y_start), (0, 255, 0), 2)
+        #boundIm = self.scene
+        #cv2.line(boundIm, (x_start, y_start), (x_start+width, y_start), (0, 255, 0), 2)
+        #cv2.line(boundIm, (x_start+width, y_start), (x_start+width, y_start+height), (0, 255, 0), 2)
+        #cv2.line(boundIm, (x_start+width, y_start+height), (x_start, y_start+height), (0, 255, 0), 2)
+        #cv2.line(boundIm, (x_start, y_start+height), (x_start, y_start), (0, 255, 0), 2)
         #cv2.imwrite('./boundIm.jpg', boundIm)
 
         return [x_start, y_start, width, height]
-    
+
     def setIdealPoint(self):
         I1 = [0, 0]
         I2 = [0, 0]
@@ -195,8 +129,8 @@ class TrackCam:
                 x_F = - (self.d - f) / (self.c - e)
                 y_F = self.c * x_F + self.d
 
-        #print('x_E = ', x_E)
-        #print('y_F = ', y_F)
+        print('x_E = ', x_E)
+        print('y_F = ', y_F)
 
         k = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / ((self.vertex[1][0]-self.vertex[0][0]) * (self.I2[0] - x_E))
         l = ((self.I1[1]-self.vertex[0][1]) * (self.vertex[3][1]-y_F)) / ((self.vertex[3][1]-self.vertex[0][1]) * (self.I1[1] - y_F))
@@ -206,22 +140,23 @@ class TrackCam:
         return [(1 - k), (1 - l)]
 
     def track(self):
-        while(True):
-            im = self.getIm()
-            im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
-            x_ave, y_ave = self.getPoint(im, True)
-            
-            if(x_ave == -1):
-                print('(---, ---) | (---, ---)')
-            else:
-                print('(', x_ave, ', ', y_ave, ')')
-                x_ratio, y_ratio = self.transformation(x_ave, y_ave)
-                if(x_ratio == -1):
-                    print('(---, ---) | (---, ---)')
-                else:
-                    print('(', x_ratio, ', ', y_ratio, ')')
+        for i in range(len(d)):
+            #im = self.getIm()
+            #im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
+            #x_ave, y_ave = self.getPoint(im, True)
+            print('==================================================')
+            print('(x_t, y_T) = ', '(', d[i][0]-self.x_start, ', ', d[i][1]-self.y_start, ')')
+            x_ratio, y_ratio = self.transformation(d[i][0]-self.x_start, d[i][1]-self.y_start)
 
+            print('(', x_ratio, ', ', y_ratio, ')')
 
+d = ([
+    [180, 190], 
+    [200, 100], 
+    [200, 200], 
+    [100, 200], 
+    [150, 150]
+    ])
 
 def main():
    trackCam = TrackCam()
