@@ -11,6 +11,7 @@ from picamera.array import PiRGBArray
 m = 0.00000001
 M = 100000000
 
+TEST = False
 
 cv_flag1 = True
 cv_flag2 = True
@@ -251,6 +252,8 @@ class TrackCam:
                     print('(---, ---) | (---, ---)')
                 else:
                     print('(', x_ave, ', ', y_ave, ') | (', self.x_ratio, ', ', self.y_ratio, ')')
+    def getXY(self):
+        return[self.x_ratio, self.y_ratio]
 
 
 

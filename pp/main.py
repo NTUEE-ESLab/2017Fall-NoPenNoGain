@@ -4,7 +4,6 @@ import time
 #from picamera import PiCamera
 #from picamera.array import PiRGBArray
 import random
-random.random()
 
 TEST = True
 
