@@ -226,15 +226,16 @@ class TrackCam:
                     print('(', x_ratio, ', ', y_ratio, ')')
 
 
-def test(len):
+def test(T, a, b):
     k = 0.5
     l = 0.5
     while(True):
-        x = random.uniform(0.1, 0.3)
-        y = random.uniform(0.1, 0.3)
-        k = clip(k+x, 0, 1)
-        l = clip(l+y, 0, 1)
-        time.sleep(0.5)
+        x = random.uniform(-b, b)
+        y = random.uniform(-b, b)
+        k = np.clip(k+x, 0, 1)
+        l = np.clip(l+y, 0, 1)
+        time.sleep(T)
+        print(k, l)
 
 
 def main():
@@ -242,7 +243,7 @@ def main():
         trackCam = TrackCam()
         trackCam.track()
     else:
-        test()
+        test(0.2, 0.01, 0.1)
 
 
 if(__name__ == '__main__'):
