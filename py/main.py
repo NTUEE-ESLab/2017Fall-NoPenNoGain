@@ -1,5 +1,5 @@
 from bluepy import btle
-from threading import Thread
+import threading
 import time
 from random import randrange
 import cv2
@@ -11,15 +11,18 @@ from picamera.array import PiRGBArray
 m = 0.00000001
 M = 100000000
 
-X = 0
-Y = 0
-
-right_button = False
-left_button = False
 
 cv_flag1 = True
 cv_flag2 = True
 cv_flag3 = True
+
+class data:
+    def __init__(self):
+        self.X = 0
+        self.Y = 0
+        self.right_button = 0
+        self.left_button = 0
+da = data()
 
 class TrackCam:
     def __init__(self):
@@ -34,7 +37,7 @@ class TrackCam:
         self.para1 = self.para2 = False
         self.I1, self.I2 = self.setIdealPoint()
         self.x_ratio = 0.
-	self.y_ratio = 0.
+        self.y_ratio = 0.
 
     def getIm(self):
         output = np.empty((960*1216*3), dtype = np.uint8)
@@ -273,34 +276,42 @@ class myStream:
     def stop(self):
         self.stopped = True
 
-def ble_thread1(cv1, cv2, cv3, echo):
+def ble_thread1(cv1, cv3, echo):
     while True:
+        print("in th1")
         cv1.acquire()
-        cv1.wait()
-        data = str(X)
-	data += str(Y)
+        #cv1.wait()
+        data = str(da.X)
+        data += str(da.Y)
+        data += str(da.right_button)
+        data += str(da.left_button)
         data_byte = str.encode(str(data))
         echo.write(data_byte, withResponse=True)
         cv1.release()
-
         cv3.acquire()
         cv3.notify_all()
         cv3.release()
     
 def ble_thread2(cv3, cv1, rspi):
     count = False
+    print("in th2")
     while True:
+
+        print("in th3")
         if count:
             cv3.acquire()
-            cv3.wait()
+            #cv3.wait()
             cv3.release()
-	else:
+        else:
             count = True
-        	
+        time.sleep(0.04)
         cv1.acquire()
-        raw = rspi.readCharacteristic()
+        raw = rspi.read()
         # need test, see what the real value is
-        #right_button = ?
+        da.right_button = raw[0]
+        da.left_button = raw[1]
+        print('right', da.right_button)
+        print('left', da.left_button)
         #left_button = ? 
         cv1.notify()
         cv1.release()
@@ -310,7 +321,7 @@ def main():
     print('Connecting...')
 
     dev_com = btle.Peripheral("F4:8C:50:AD:0D:A8")
-    #dev_rpi = btle.Peripheral("B8:27:EB:C3:E4:99")
+    dev_rpi = btle.Peripheral("B8:27:EB:C3:E4:99")
     echo = dev_com.getCharacteristics()[-1]
     rspi = dev_rpi.getCharacteristics()[-1]
 
@@ -321,8 +332,8 @@ def main():
     condition1 = threading.Condition()
     #condition2 = threading.Condition()
     condition3 = threading.Condition()
-    ble_com = threading.Thread(name='com', target=ble_thread1, args=(condition1, condition3, echo,))
-    ble_rpi = threading.Thread(name='rpi', target=ble_thread2, args=(condition1, condition3, rspi,))
+    ble_com = threading.Thread(name='com', target=ble_thread1, args=(condition1, condition3, echo))
+    ble_rpi = threading.Thread(name='rpi', target=ble_thread2, args=(condition1, condition3, rspi))
 
     ble_com.start()
     #time.sleep(2)
@@ -332,12 +343,13 @@ def main():
     count = False;
     while True:
         trackCam.track()
-	if count:
-	    cv3.acquire()
+        print("after track")
+        if count:
+            cv3.acquire()
             cv3.wait()
             X, Y = trackCam.getXY()
             cv3.release()
-	else:
+        else:
             X, Y = trackCam.getXY()
             count = True
 	
