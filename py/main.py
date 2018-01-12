@@ -136,9 +136,9 @@ class TrackCam:
         cv2.imwrite('./boundIm.jpg', boundIm)
 
         return [x_start, y_start, width, height]
-
     def setIdealPoint(self):
-        I1 = I2 = [0, 0]
+        I1 = [0, 0]
+        I2 = [0, 0]
         print('Are vertical bounds parallel:', end = ' ')
         if((self.vertex[3][0]-self.vertex[0][0])*(self.vertex[2][1]-self.vertex[1][1]) == (self.vertex[2][0]-self.vertex[1][0])*(self.vertex[3][1]-self.vertex[0][1])):
             self.para1 = True
@@ -172,27 +172,20 @@ class TrackCam:
         else:
             print('Ideal point 1 at inf')
         if(not self.para2):
-            if(self.vertex[0][1] == self.vertex[1][1]):
-                I2[0] = self.vertex[2][0] + (self.vertex[1][1]-self.vertex[2][1])*(self.vertex[2][0]-self.vertex[3][0])/(self.vertex[2][1]-self.vertex[3][1])
-                I2[1] = self.vertex[0][1]
-            elif(self.vertex[2][1] == self.vertex[3][1]):
-                I2[0] = self.vertex[1][0] + (self.vertex[2][1]-self.vertex[1][1])*(self.vertex[1][0]-self.vertex[0][0])/(self.vertex[1][1]-self.vertex[0][1])
-                I2[1] = self.vertex[2][1]
-            else:
-                self.a = (self.vertex[1][1]-self.vertex[0][1]) / (self.vertex[1][0]-self.vertex[0][0])
-                self.b = - self.a * self.vertex[0][0] + self.vertex[0][1]
-                e = (self.vertex[2][1]-self.vertex[3][1]) / (self.vertex[2][0]-self.vertex[3][0])
-                f = - e * self.vertex[3][0] + self.vertex[3][1]
+            self.a = (self.vertex[1][1]-self.vertex[0][1]) / (self.vertex[1][0]-self.vertex[0][0])
+            self.b = - self.a * self.vertex[0][0] + self.vertex[0][1]
+            e = (self.vertex[2][1]-self.vertex[3][1]) / (self.vertex[2][0]-self.vertex[3][0])
+            f = - e * self.vertex[3][0] + self.vertex[3][1]
 
-                I2[0] = - (self.b - f) / (self.a - e)
-                I2[1] = I2[0] * self.a + self.b
+            I2[0] = - (self.b - f) / (self.a - e)
+            I2[1] = I2[0] * self.a + self.b
 
             print('Ideal point 2 at (', I2[0], ', ', I2[1], ')')
         else:
             print('Ideal point 2 at inf')
 
-        return I1, I2
- 
+        return [I1, I2]
+
     def transformation(self, x_T, y_T):
         x_E = 0
         y_F = 0
@@ -224,8 +217,8 @@ class TrackCam:
                 x_F = - (self.d - f) / (self.c - e)
                 y_F = self.c * x_F + self.d
 
-        print('x_E = ', x_E)
-        print('y_F = ', y_F)
+        #print('x_E = ', x_E)
+        #print('y_F = ', y_F)
 
         k = ((self.I2[0]-self.vertex[0][0]) * (self.vertex[1][0]-x_E)) / ((self.vertex[1][0]-self.vertex[0][0]) * (self.I2[0] - x_E))
         l = ((self.I1[1]-self.vertex[0][1]) * (self.vertex[3][1]-y_F)) / ((self.vertex[3][1]-self.vertex[0][1]) * (self.I1[1] - y_F))
