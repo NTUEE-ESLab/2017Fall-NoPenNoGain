@@ -1,11 +1,11 @@
 import numpy as np
 import time
-#import cv2
-#from picamera import PiCamera
-#from picamera.array import PiRGBArray
+import cv2
+from picamera import PiCamera
+from picamera.array import PiRGBArray
 import random
 
-TEST = True
+TEST = False 
 
 class TrackCam:
     def __init__(self):
@@ -37,12 +37,12 @@ class TrackCam:
         uppRed = np.array([90,255,255])
         im_mask = cv2.inRange(im_hsv, lowRed, uppRed)
 
-        '''
+        
         if(save == True):
             cv2.imwrite('./record/im'+str(self.idx)+'.jpg', im)
             cv2.imwrite('./record/mask'+str(self.idx)+'.jpg', im_mask)
             self.idx += 1
-        '''
+        
 
 
         # Get the non-zero part
