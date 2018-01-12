@@ -1,13 +1,6 @@
 #include "toolbar.h"
 #include <QApplication>
 #include <QPalette>
-#include <condition_variable>
-#include <mutex>
-
-std::mutex m;
-std::condition_variable cv;
-bool erase = false;
-bool click = false;
 
 int main(int argc, char *argv[])
 {
@@ -39,13 +32,7 @@ int main(int argc, char *argv[])
     Toolbar _toolbar(_drawindow);
     _toolbar.show();
 
-    while(1){
-        std::unique_lock<std::mutex> lk(m);
-        cv.wait(lk, []{return click && erase;});
-        lk.unlock();
-        // erase here
-    }
+return a.exec();
 
-   return a.exec();
 }
 
