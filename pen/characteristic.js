@@ -4,6 +4,10 @@ var bleno = require('../..');
 
 var BlenoCharacteristic = bleno.Characteristic;
 
+var left = '0';
+
+var right = '0';
+
 var EchoCharacteristic = function() {
   EchoCharacteristic.super_.call(this, {
     uuid: 'ec0e',
@@ -19,8 +23,8 @@ util.inherits(EchoCharacteristic, BlenoCharacteristic);
 
 EchoCharacteristic.prototype.onReadRequest = function(offset, callback) {
   console.log('EchoCharacteristic - onReadRequest: value = ' + this._value.toString('hex'));
-
-  callback(this.RESULT_SUCCESS, );
+  //this._value = new Buffer(left + right);
+  callback(this.RESULT_SUCCESS,this._value );
 };
 
 EchoCharacteristic.prototype.onWriteRequest = function(data, offset, withoutResponse, callback) {

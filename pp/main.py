@@ -1,8 +1,12 @@
 import numpy as np
 import time
-import cv2
-from picamera import PiCamera
-from picamera.array import PiRGBArray
+#import cv2
+#from picamera import PiCamera
+#from picamera.array import PiRGBArray
+import random
+random.random()
+
+TEST = True
 
 class TrackCam:
     def __init__(self):
@@ -222,10 +226,24 @@ class TrackCam:
                     print('(', x_ratio, ', ', y_ratio, ')')
 
 
+def test(T, a, b):
+    k = 0.5
+    l = 0.5
+    while(True):
+        x = random.uniform(-b, b)
+        y = random.uniform(-b, b)
+        k = np.clip(k+x, 0, 1)
+        l = np.clip(l+y, 0, 1)
+        time.sleep(T)
+        print(k, l)
+
 
 def main():
-   trackCam = TrackCam()
-   trackCam.track()
+    if(TEST == False):
+        trackCam = TrackCam()
+        trackCam.track()
+    else:
+        test(0.2, 0.01, 0.1)
 
 
 if(__name__ == '__main__'):
