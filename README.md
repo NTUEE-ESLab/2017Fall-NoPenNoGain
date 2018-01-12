@@ -2,10 +2,11 @@
 This is a project demonstrates how to use a laser pointer to control the cursor on the projection screen.
 
 ## Introduction
+
 ### Scenario
 Most of the time, like in a class or meeting, the most comment and convenient way to present is to project the screen of the speecher's computer(or some other devices like iPad) to a projection screen and using a mouse or touching on the host computer(or a pad) to control the cursor. Often, there's a need for writing on the screen. An obvious limitation for presenting while writing on the screen is that you need to stay in front of the computer's screen. Now, imagine that you can just use a laser pointer, walk around the stage, present with gestures, and control the cursor with the pointer right in your hand! And that what NoPenNoGain want to do for you.
 ### Description
-The main part of this project is an Raspberry Pi with a camera, detecting the light point in the screen, and return the position to the host computer. There's another Raspberry Pi 
+The main part of this project is an Raspberry Pi with a camera, detecting the light point in the screen, and returning the position to the host computer. There's another Raspberry Pi with two button binded with the laser pointer. The second Raspberry Pi return the right or left click of a mouse to the fisrt Pi for it to pack the position and click information into a package to transfer to the host computer. All the communications mentioned aboved are Bluetooth Low Energy(ble). 
 ## Requirements
 Requires a [***Raspberry Pi computer***](https://www.raspberrypi.org/documentation/setup/) and a 
 [***RPI camera module installed***](https://www.raspberrypi.org/documentation/usage/camera/).
