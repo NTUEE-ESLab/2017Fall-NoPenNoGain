@@ -233,8 +233,7 @@ class TrackCam:
         return self.x_ratio, self.y_ratio
 
     def track(self):
-        while(True):
-            input()
+        
             im = self.getIm()
             im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
             x_ave, y_ave = self.getPoint(im, True)
