@@ -5,11 +5,21 @@ This is a project demonstrates how to use a laser pointer to control the cursor 
 ![scenario](https://user-images.githubusercontent.com/30167968/34891826-f82e2282-f811-11e7-87b4-62c12ccd8726.png)
 ### Scenario
 Most of the time, like in a class or meeting, the most comment and convenient way to present is to project the screen of the speecher's computer(or some other devices like iPad) to a projection screen and using a mouse or touching on the host computer(or a pad) to control the cursor. Often, there's a need for writing on the screen. An obvious limitation for presenting while writing on the screen is that you need to stay in front of the computer's screen. Now, imagine that you can just use a laser pointer, walk around the stage, present with gestures, and control the cursor with the pointer right in your hand! And that what NoPenNoGain want to do for you.
-### Description
-The main part of this project is an Raspberry Pi with a camera, detecting the light point in the screen, and returning the position to the host computer. There's another Raspberry Pi with two button binded with the laser pointer. The second Raspberry Pi return the right or left click of a mouse to the fisrt Pi for it to pack the position and click information into a package to transfer to the host computer. All the communications mentioned aboved are Bluetooth Low Energy(ble).
 ## Requirements
-Require two [***Raspberry Pi computer***](https://www.raspberrypi.org/documentation/setup/) and one with 
-[***RPI camera module installed***](https://www.raspberrypi.org/documentation/usage/camera/).
+### Hardware
+A Windows device, two [***Raspberry Pi computer***](https://www.raspberrypi.org/documentation/setup/) and one with 
+[***RPI camera module installed***](https://www.raspberrypi.org/documentation/usage/camera/), the other with a two switches connecting on pin 11 and 13.
+### Software
+A compiled ***OpenCV*** module on the Pi with camera, both Pis need to install ***nodejs***, and the Windows device able to run ***nodejs*** files.
+## Description
+The main part of this project is an Raspberry Pi with a camera, detecting the light point in the screen, and returning the position to the host computer. There's another Raspberry Pi with two button binded with the laser pointer. The second Raspberry Pi return the right or left click of a mouse to the fisrt Pi for it to pack the position and click information into a package to transfer to the host computer. All the communications mentioned aboved are Bluetooth Low Energy(ble).
+There are three seperated parts in the whole project. One in ***/camera***, another in ***/pen***, the other in ***/toobar***.
+### /camera
+This part is where the image detection taking place. Once executed, the Pi will first connect to the host computer and the pen(the second Pi), and request the user to manually configure the four vertexes of the screen starting from up-left side counter-clockwisely. After configuration, the cursor controll starts.
+
+### /pen
+### /toolbar
+
  
 **IMPORTANT** - It is suggested you do a Raspbian ***sudo apt-get update*** and ***sudo apt-get upgrade***
 before curl install, since it is **No longer** performed by the pi-timolo-install.sh script
