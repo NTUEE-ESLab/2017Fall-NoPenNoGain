@@ -239,14 +239,16 @@ class TrackCam:
             im = im[self.y_start : (self.y_start + self.height), self.x_start : (self.x_start + self.width)]
             x_ave, y_ave = self.getPoint(im, True)
             
+            print('==============================')
             if(x_ave == -1):
                 print('(---, ---) | (---, ---)')
             else:
+                print('(', x_ave, ', ', y_ave, ')')
                 self.x_ratio, self.y_ratio = self.transformation(x_ave, y_ave)
                 if(self.x_ratio == -1):
                     print('(---, ---) | (---, ---)')
                 else:
-                    print('(', x_ave, ', ', y_ave, ') | (', self.x_ratio, ', ', self.y_ratio, ')')
+                    print('(', self.x_ratio, ', ', self.y_ratio, ')')
     def getXY(self):
         return[self.x_ratio, self.y_ratio]
 
