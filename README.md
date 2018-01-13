@@ -24,7 +24,7 @@ The ```/camera/main.py``` has three threads: one is the main thread, which handl
 ### /pen
 The part use ***nodejs*** for higher speed, using [***rpi-gpio-buttons***](https://www.npmjs.com/package/rpi-gpio-buttons) to detect button switch and [***bleno***](https://github.com/sandeepmistry/bleno) to implement ble.
 ### /toolbar
-This part use ***QT creator*** to compile the code. There are some functions in the toolbar, such as red/black/blue pen, eraser, choosing size of brush, page up/down, minimizing/closing the window. You can use the toolbar to paint on your screen. The file ```/toolbar/toolbar.pro``` is a project file for QT creator. In ```/toolbar/ui```, there are two ui file for QT creator. In ```/toolbar/sourcecode```, toolbar.cpp controls the main window, and paint.cpp controls the window for painting, the paintscene.cpp controls a scene on paint window.  In ```/toolbar/image_qrc```, there are some pictures we used and a qrc file for QT creator. When you compile it, you should put the all .cpp/.h/.qrc/.ui/.pro file in the same folder and remake the qrc file again. 
+This part use ***QT creator*** to compile the code. There are some functions in the toolbar, such as red/black/blue pen, eraser, choosing size of brush, page up/down, minimizing/closing the window. You can use the toolbar to paint on your screen. The file ```/toolbar/toolbar.pro``` is a project file for QT creator. In ```/toolbar/ui```, there are two ui file for QT creator. In ```/toolbar/sourcecode```, toolbar.cpp controls the main window, and paint.cpp controls the window for painting, the paintscene.cpp controls a scene on paint window.  In ```/toolbar/image_qrc```, there are some pictures we used and a qrc file for QT creator.
 ## Installation
 ### /camera
 On the Pi with camera, 
@@ -44,8 +44,8 @@ On the second Pi,
       sudo node main
 
 ### /toolbar 
-* Compile and install on your PC. Useful link: https://www.qt.io/
-
+* Compile and install QT creator on your PC. (link: https://www.qt.io/)
+* When you compile it, you should put the all .cpp/.h/.qrc/.ui/.pro file in the same folder and remake the qrc file again. 
 
 ## Demo
 ![inked2_li](https://user-images.githubusercontent.com/30167968/34902208-a4874268-f851-11e7-933b-e55a008b5e46.jpg)
