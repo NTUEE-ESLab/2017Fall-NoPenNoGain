@@ -17,18 +17,32 @@ Most of the time, like in a class or meeting, the most comment and convenient wa
 * The Windows device need to be able to run ***nodejs*** files.
 ## Description
 The main part of this project is an Raspberry Pi with a camera, detecting the light point in the screen, and returning the position to the host computer. There's another Raspberry Pi with two button binded with the laser pointer. The second Raspberry Pi return the right or left click of a mouse to the fisrt Pi for it to pack the position and click information into a package to transfer to the host computer. All the communications mentioned aboved are Bluetooth Low Energy(ble).
-There are three seperated parts in the whole project. One in ```/camera```, another in ```/pen```, the other in ```/toobar```.
+There are three seperated parts in the whole project. One in ```/camera```, another in ```/pen```, the other in ```/toolbar```.
 ### /camera
 This part is where the image detection taking place. Once executed, the Pi will first connect to the host computer and the pen(the second Pi), and request the user to manually configure the four vertexes of the screen starting from up-left side counter-clockwisely. After configuration, the cursor controll starts.
-The ***/camera/main.py*** has three threads: one is the main thread, which handles the establishment of the ble connection, initialization of the image processor, and an infinite while loop for detecting and computing the right position of the light point; the other two threads deal with the read/write operations to pen/computer respectively.
+The ```/camera/main.py``` has three threads: one is the main thread, which handles the establishment of the ble connection, initialization of the image processor, and an infinite while loop for detecting and computing the right position of the light point; the other two threads deal with the read/write operations to pen/computer respectively.
 ### /pen
 The part use ***nodejs*** for higher speed, using [***rpi-gpio-buttons***](https://www.npmjs.com/package/rpi-gpio-buttons) to detect button switch and [***bleno***](https://github.com/sandeepmistry/bleno) to implement ble.
 ### /toolbar
-This part use ***QT creator*** to compile the code. There are some functions in the toolbar, such as red/black/blue pen, eraser, choosing size of brush, page up/down, minimizing/closing the window. You can use the toolbar to paint on your screen. The file ***/toolbar/toolbar.pro*** is a project file for QT creator. In ***/toolbar/ui***, there are two ui file for QT creator. In ***/toolbar/sourcecode***, toolbar.cpp controls the main window, and paint.cpp controls the window for painting, the paintscene.cpp controls a scene on paint window.  In ***/toolbar/image_qrc***, there are some pictures we used and a qrc file for QT creator. When you compile it, you should put the all .cpp/.h/.qrc/.ui/.pro file in the same folder and remake the qrc file again. 
+This part use ***QT creator*** to compile the code. There are some functions in the toolbar, such as red/black/blue pen, eraser, choosing size of brush, page up/down, minimizing/closing the window. You can use the toolbar to paint on your screen. The file ```/toolbar/toolbar.pro``` is a project file for QT creator. In ```/toolbar/ui```, there are two ui file for QT creator. In ```/toolbar/sourcecode```, toolbar.cpp controls the main window, and paint.cpp controls the window for painting, the paintscene.cpp controls a scene on paint window.  In ```/toolbar/image_qrc```, there are some pictures we used and a qrc file for QT creator. When you compile it, you should put the all .cpp/.h/.qrc/.ui/.pro file in the same folder and remake the qrc file again. 
 ## Installation
 ### /camera
-* Compile and install OpenCV on your Pi. Useful link: https://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/
-* 
+On the Pi with camera, 
+* Compile and install OpenCV on your Pi.(https://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/)
+* Check your camera on Pi is in operation.(https://www.raspberrypi.org/documentation/usage/camera/)
+* Place this folder in the working space of your Pi with camera, and execute
+
+      python3 main.py
+      
+### /pen
+On the second Pi, 
+* Set up the two switches.(link: https://www.cl.cam.ac.uk/projects/raspberrypi/tutorials/robot/buttons_and_switches/)
+* Install nodejs in your second Pi.(link: https://nodejs.org/en/download/package-manager/)
+* git clone [***bleno***](https://github.com/sandeepmistry/bleno) and replace all the files in ```bleno/examples/echo/``` with ```NoPenNoGain/pen/main.js```.
+* Implement 
+     
+      sudo node main
+
 ### /toolbar 
 * Compile and install on your PC. Useful link: https://www.qt.io/
 
