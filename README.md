@@ -24,11 +24,12 @@ The ***/camera/main.py*** has three threads: one is the main thread, which handl
 ### /pen
 The part use ***nodejs*** for higher speed, using [***rpi-gpio-buttons***](https://www.npmjs.com/package/rpi-gpio-buttons) to detect button switch and [***bleno***](https://github.com/sandeepmistry/bleno) to implement ble.
 ### /toolbar
+This part use ***QT creator*** to compile the code. There are some function in the toolbar, such as red/black/blue pen, eraser, choosing size of brush, page up/down, minimizing/closing the window.
 ## Installation
 ### /camera
 * Compile and install OpenCV on your Pi. Useful link: https://www.pyimagesearch.com/2016/04/18/install-guide-raspberry-pi-3-raspbian-jessie-opencv-3/
 * 
- 
+### /camera 
 **IMPORTANT** - It is suggested you do a Raspbian ***sudo apt-get update*** and ***sudo apt-get upgrade***
 before curl install, since it is **No longer** performed by the pi-timolo-install.sh script
 
