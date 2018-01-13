@@ -48,4 +48,5 @@ On the Windows device(host computer),
 * Dowload the whole folder ```/host-computer/toolbar```, and implement the .exe
 * Place the nodejs project in your Visual Studio to run the ble and mouse control.
  
-## 
+## Demo
+
