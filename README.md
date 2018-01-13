@@ -49,4 +49,5 @@ On the Windows device(host computer),
 * Place the nodejs project in your Visual Studio to run the ble and mouse control.
  
 ## Demo
+![inked2_li](https://user-images.githubusercontent.com/30167968/34902208-a4874268-f851-11e7-933b-e55a008b5e46.jpg)
 
