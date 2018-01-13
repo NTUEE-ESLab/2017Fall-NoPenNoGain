@@ -1,5 +1,5 @@
 # NoPenNoGain
-This is a project demonstrates how to use a laser pointer to control the cursor on the projection screen.
+This is a project demonstrating how to use a laser pointer to control the cursor on the projection screen.
 
 ## Introduction
 ![scenario](https://user-images.githubusercontent.com/30167968/34891826-f82e2282-f811-11e7-87b4-62c12ccd8726.png)
