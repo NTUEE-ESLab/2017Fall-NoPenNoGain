@@ -1,0 +1,14 @@
+{
+  "name": "nodejs-console-app2",
+  "version": "0.0.0",
+  "description": "NodejsConsoleApp2",
+  "main": "app.js",
+  "author": {
+    "name": "user"
+  },
+  "dependencies": {
+    "bleno": "^0.4.2",
+    "bluetooth-hci-socket": "^0.5.1",
+    "robotjs": "^0.4.7"
+  }
+}
