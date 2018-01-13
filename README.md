@@ -8,8 +8,9 @@ Most of the time, like in a class or meeting, the most comment and convenient wa
 ## Requirements
 ### Hardware
 * A Windows device.
-* Two [***Raspberry Pi computer***](https://www.raspberrypi.org/documentation/setup/): one with 
-[***RPI camera module installed***](https://www.raspberrypi.org/documentation/usage/camera/), the other with a two switches connecting on pin 11 and 13.
+* Two [***Raspberry Pi computer***](https://www.raspberrypi.org/documentation/setup/) : 
+    * one with [***RPI camera module installed***](https://www.raspberrypi.org/documentation/usage/camera/),
+    * the other with a two switches connecting on pin 11 and 13.
 ### Software
 * A compiled ***OpenCV*** module on the Pi with camera.
 * Both Pis need to install ***nodejs***.
